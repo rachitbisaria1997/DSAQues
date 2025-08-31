@@ -1,0 +1,8 @@
+add(E e)	Adds element, throws exception if fails
+offer(E e)	Adds element, returns false if fails
+remove()	Removes and returns head, throws exception if empty
+poll()	Removes and returns head, returns null if empty
+element()	Returns head without removing, throws exception if empty
+peek()	Returns head without removing, returns null if empty
+isEmpty()	Checks if the queue is empty
+size()	Returns number of elements
