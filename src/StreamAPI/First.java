@@ -122,6 +122,23 @@ public class First {
             System.out.println(firstRep);
         }
 
+        String input = "Java Stream API makes code elegant";
+
+        String revStr = Arrays.stream(input.split(" "))
+                .map(word -> new StringBuilder(word).reverse().toString())
+                .collect(Collectors.joining(" "));
+
+        System.out.println(revStr);
+
+        // find all unique words from a string in sorted
+
+        String dupstr = "Java is fun and Java is powerful";
+
+        List<String> uniqueWords = Arrays.stream(dupstr.split(" ")).distinct().sorted().collect(Collectors.toList());
+
+        System.out.println(uniqueWords);
+
+
     }
 
     public boolean isPrime(int num){

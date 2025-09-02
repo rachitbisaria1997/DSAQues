@@ -3,7 +3,7 @@ package Stacks;
 import java.util.Scanner;
 import java.util.Stack;
 
-public class mNge {
+class mNge {
 
     public static void main(String[] args) {
 

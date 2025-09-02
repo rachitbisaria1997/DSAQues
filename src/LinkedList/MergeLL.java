@@ -16,8 +16,6 @@
 //
 //    static ListNode mergeTwoLists(Node l1, Node l2){
 //
-//        ArrayList<Integer> arr = new ArrayList<>();
-//
 //        ListNode dummy = new ListNode(-1), curr = dummy;
 //
 //        while(l1 != null && l2 != null){
