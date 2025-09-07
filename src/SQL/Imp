@@ -1,0 +1,172 @@
+create database dbName;
+drop database name;
+drop database if exists db_name;
+show databases;
+
+DDL - create, alter, rename, truncate, drop
+DQL = select
+DCL = grant, revoke
+
+
+insert into student(rollno, name) values(101, 'rachit');
+create table temp1(id int not null, name varchar(50), age int, city varchar(30), primary key(id, name));
+
+create table tab1(id int, age int check(age >=18));
+
+create table city(id int primary key, city varchar(20), constraint age_check check (age >=18 and age <=16));
+
+select name, city from student where marks >= 80;
+select name, city from student where city = 'noida';
+
+select * from student where marks between 80 and 90;
+
+select *from student where city in('Delhi', 'Noida');
+
+select city, avg(marks) from student group by city order by avg(marks) desc;
+
+select city, count(name) from student group by city having max(marks) > 90;
+
+update student set marks = marks + 10 where grade = 'E';
+
+update student set grade = 'C' where marks between 80 and 90;
+
+create table dept(id int primary key, name varchar(20));
+
+update student set grade = 'C' where marks between 80 and 90;
+
+delete from student where marks < 30;
+
+create table dept(
+id int primary key,
+name varchar(20)
+);
+
+create table teacher(
+id int primary key,
+name varchar(20),
+dept_id int,
+foreign key(dept_id) references dept(id)
+);
+
+select count(name), city from student group by city having max(marks) > 90;
+
+alter table tab_name
+add column age int check age >=18;
+
+alter table table_name
+drop column col_name;
+
+alter table table_name
+rename to new_tab_name;
+
+alter table table_name
+change column age new_age int check age >=30;
+
+select * from student as s
+inner join course c
+on s.id = c.id;
+
+select * from student as s
+left join course c
+on s.id = c.id;
+
+select * from student as s
+right join course c
+on s.id = c.id;
+
+select * from student as s
+left join course as c
+on s.id = c.id
+union
+select * from student as s
+right join course as c
+on s.id = c.id;
+
+
+select name from tableA
+union
+select name from tableB;
+
+union all gives duplicates also
+select name from tableA
+union all
+select name from tableB;
+
+//sub queries
+
+select name, marks from student where marks > (select avg(marks) from student);
+
+select name, roll from student where rollNo in (select rollNo from student where rollNo % 2 == 0);
+
+create view view1 as
+select rollno, name from student;
+
+select * from view1;
+drop view view1;
+
+helps in restricting users in viewing sensitive columns
+like phone-number
+
+CREATE VIEW customer_public AS
+SELECT customer_name, city
+FROM customers;
+
+select * from student where name like 'S%';
+name starting with S;
+
+select * from student where firstName like '[bsp]%';
+firstName starts with bs or p
+
+dropping index
+
+alter table person
+drop constraint cons_name;
+
+2nd higest salary
+
+select max(salary) from employees where salary < (select max(salary) from employees);
+
+// find duplicate records
+select name, count(*)
+from employees
+group by name
+having count(*) > 1;
+
+Find Duplicate Records
+
+select name, count(*) from employee
+group by name
+having count(*) > 1;
+
+Find Employees Who Don’t Have a Manager
+select * from employees
+where manager_id is null;
+
+Find Employees With Same Salary
+select salary, count(*)
+from employees
+group by salary
+having count(*) > 1;
+
+Highest Purchase Customer in Last 1 Year
+
+select cust_id
+from orders
+where order_date BETWEEN '2024-01-01' AND '2024-12-31'
+group by cust_id
+order by sum(amount) desc
+limi1;
+
+Find Department-Wise Highest Salary
+SELECT department_id, MAX(salary) AS max_salary
+FROM employees
+GROUP BY department_id;
+
+Count Employees Department-Wise
+
+select dept_id , count(*) as total_employees
+from employees
+group by dept_id;
+
+
+

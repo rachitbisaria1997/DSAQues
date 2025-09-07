@@ -1,0 +1,2537 @@
+	
+	
+	@FunctionalInterface   useful in writing lambda expressions and method reference.concise, readable code. 
+	public interface CalcOperation{
+	
+		double operation(int a, int b);
+
+
+	}
+	
+	psvm()
+	{
+	
+		CalcOperation subtraction = (p,q) -> {
+			return p - q;
+		};
+		
+		CalcOperation addition = (p,q) -> {
+			return p + q;
+		};
+		
+		double value = subtraction.operation(30,12);
+		SOP(value);
+		
+		double val = addition.operation(10,20);
+		SOP(val1);
+	
+	}
+	
+	interface abc{
+		default void methodName()
+		{
+			SOP("COMMON");
+		}	
+	}
+	
+	class Car implements abc{
+		
+	}
+	
+	class B {
+		
+		psvm()
+		{
+			Car c = new Car();
+			c.methodName();
+		
+		}
+	}
+	
+	Predicate<Integer> ageCheck = age -> age > 30;
+	
+	SOP(ageCheck.test(32)); true
+	
+	SOP(ageCheck.test(2)); true
+	
+	
+	if(ageCheck.test(44)){
+		SOP("eligible");
+	}
+	else {
+		SOP("not eligible");
+	}
+	
+	 Employee e1 = new Employee();
+        e1.setId(111);
+        e1.setSalary(27000);
+		
+	Predicate<Employee> empSalaryCheck = emp -> emp.getSalary() > 2000;
+	
+	if(empSalaryCheck.test(e1)){
+		SOP("above 20000");
+	}
+	else{
+		SOP("below 20000");
+	}
+	
+	String [] words = new String[8];
+	words[5] = "jij";
+	
+	Optional<String> checkNull = Optional.ofNullable(words[5]);
+	if(checkNull.isPresent())
+	{
+		String name =  checkNull.get();
+		SOP(name.toUpperCase());
+		SOP(name.isPresent());
+	}	
+	else{
+	SOP("not present");
+	}
+	
+	
+	String name = "rachit bisaria";
+	Optional<String> value = null;
+	
+	if(name == null)
+	{
+		value = Optional.empty();
+	}
+	else{
+		value = Optional.of(name);
+	}
+	
+	
+	Optional<String> nameContainer = getName();
+	nameContainer.isPresent(val -> SOP(val.toUpperCase()));
+	
+	nameContainer.ifPresentOrElse(
+		
+		(val) -> {
+			SOP(val.toUpperCase());
+		},
+		() -> {
+			SOP("value is not present");
+		}
+	);
+	
+	public class MethodReferenceDemo {
+
+    //Method references are a shorthand notation of lambda expressions to call a method directly.
+
+    public void print(String s) {
+        System.out.println(s);
+    }
+
+    public void display(String msg){
+        System.out.println("instance print: "+ msg);
+    }
+
+    public static void main(String[] args) {
+
+        Demo demo = new Demo();
+        List<String> list = Arrays.asList("Apple", "Banana");
+
+        list.forEach(MethodRefDemo::print);
+
+        List<String> names = Arrays.asList("Zara", "Liam", "Noah", "Emma");
+        names.sort(String::compareToIgnoreCase);
+        names.forEach(System.out::println);
+
+    }
+
+
+	}
+	
+	
+	List<Integer> numbers = Arrays.asList(2,4,6,8,10,11,12,14,15);
+	
+	boolean containsPrime = numbers.stream().anyMatch(StreamExamples::isPrime);
+	
+	public static boolean isPrime(int number){
+
+        if(number < 1){
+            return false;
+        }
+
+        for(int i=2; i< number; i++){
+            if(number % i == 0){
+                return false;
+            }
+        }
+        return true;
+
+    }
+	
+	List<Integer> list1 = Arrays.asList(1,2, 3, 5, 7, 9);
+    List<Integer> list2 = Arrays.asList(2, 4, 6, 8, 10);
+	
+	List<Integer> mergd = Stream.concat(list1.stream(), list2.stream()).sorted().collect(Collectors.toList());
+	SOP(mergd);
+	
+	 		
+				
+	Optional<String> longestString = strings.stream().max(Comparator.comparingInt(String::length));
+	
+	List<Integer> numbersWithDuplicates = Arrays.asList(1, 2, 3, 2, 4, 1, 5, 6, 5);
+	
+	List<Integer> uniqelem = numbersWithDuplicates.stream().distinct().collect(Collectors.toList());
+	int[] array = {4, 2, 7, 1, 5, 3, 6};
+        int k=3;
+		
+		
+	int kthsmallest = Arrays.stream(array).sorted().skip(k-1).findFirst().orElse(-1);
+	
+	List<String> words = Arrays.asList("apple", "banana", "apple", "cherry",
+                "banana", "apple");
+				
+	Map<String, Long> wordFreq = words.stream().collect(Collectors.groupingBY(Function.identity(), Collectors.counting()));
+	
+	
+	
+	
+	// Collections framework
+
+	HashMap = doesn't maintain order and not thread safe.
+
+	1. ConcurrentHashMap - its thread safe, doesnt maintains order, and suitable for concurrency. Allows multiple threads to read and write concurrently
+         without locking the entire map
+	
+	ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+
+        map.put("A", 1);
+        map.put("B", 1);
+        map.put("C", 1);
+
+        System.out.println("value of A is "+ map.get("A"));
+
+        map.remove("B");
+        map.putIfAbsent("C++", 3);
+
+        map.forEach((k, v) -> System.out.println(k + ":"+ v));
+	
+	2. ConcurrentSkipListMap  its thread safe, maintains order, and suitable for concurrency, maintains keys in natural order
+	
+		ConcurrentSkipListMap<String, Integer> map = new ConcurrentSkipListMap<>();
+        map.put("apple", 1);
+        map.put("banana", 2);
+        map.put("jamun", 3);
+
+        System.out.println(map);
+
+        System.out.println("first key is "+ map.firstKey());
+		
+	3. EnumMap
+		
+		Map<Day, String> map = new EnumMap<>(Day.class);
+		map.put(Day.MONDAY, "Gym");
+        map.put(Day.TUESDAY, "Walk");
+		
+		enum Day {
+			MONDAY, TUESDAY
+		}
+		
+	3. linkedHashMap - preserves order in which keys were inserted.
+	
+		HashMap<String, Integer> linkedHashMap = new HashMap<>(11);
+        linkedHashMap.put("orange", 6);
+        linkedHashMap.put("apple", 5);
+	
+	4. Sorted Map - keys are sorted in ascending natural order
+	
+		SortedMap<Integer, String> map = new TreeMap<>();
+
+        map.put(45, "vivek");
+        map.put(55, "mohit");
+	
+	
+	B. Set overview
+	Set<Integer> set = new HashSet<>();
+		set.add(12);
+        set.add(15);
+        set.add(25);
+	SOP(set.contains(25));
+	
+	no guarantee of iteration order
+	
+	Set<String> set = new LinkedHashSet<>(); maintains insertion order 
+	Set<String> set = new TreeSet<>();  maintains elements in sorted order
+	
+	C. Vectors
+		
+		// initial capacity is 5, capacityIncrement is 3
+		
+		Vector<Integer> vector = new Vector<>(5, 3);
+        vector.add(1);
+        vector.add(2);
+        vector.add(3);
+
+        System.out.println(vector.capacity());
+        vector.add(4);
+
+        for(int i=0; i<vector.size(); i++){
+            System.out.println(vector.get(i));
+        }
+		
+	D. LRUCache
+	
+	public class LRUCache <K, V> extends LinkedHashMap<K, V> {
+
+  	  private int capacity;
+
+   	 public LRUCache(int cap){
+        	this.capacity = cap;
+    	}
+
+    	@Override
+    	protected boolean removeEldestEntry(Map.Entry<K,V> eldest){
+        return size() > capacity;
+    	}
+
+    	public static void main(String[] args) {
+
+        LRUCache<String, Integer> studentMap = new LRUCache<>(3);
+        studentMap.put("bob", 99);
+        studentMap.put("alice", 101);
+        studentMap.put("ram", 199);
+        studentMap.put("vipul", 89);
+
+        // here capacity is 3, least recently used is bob hence its removed from studentmap
+
+        System.out.println(studentMap);
+   	 }
+
+	}	
+	
+
+
+
+	
+	Q. singleton classes allows only 1 instance to be created and provides global access point to it. ensures single instance is created.
+       Keep a single, consistent configuration object for the whole application (e.g., DB configs, app settings). Logger instance
+	
+		public class MySingleton {
+
+			// Static gives global access to the instance/method.
+			private static final MySingleton instance = new MySingleton();
+
+			// Private constructor to prevent external instantiation
+			private MySingleton() {
+				System.out.println("Singleton instance created");
+			}
+
+			// Public method to return the singleton instance
+			public static MySingleton getInstance() {
+				return instance;
+			}
+
+			public void showMessage() {
+				System.out.println("Hello from Singleton");
+			}
+	   }
+		
+	class Main
+	{
+		psvm()
+		{
+			MySingleton obj1 = MySingleton.getInstance();
+			MySingleton obj2 = MySingleton.getInstance();
+			
+			obj1.showMessage();
+			SOP(obj1 == obj2) - true
+		}
+	}
+	
+	Q. difference between equals() and == in java
+	== checks for memory reference while equals() checks for content
+	
+	Q. final keywords can be used in 4 contexts - final variable value cant be changed once assigned
+		final method cannot be overriden. final class Cannot be extended/inherited. 
+	
+	Q. strings are immutable in java because of security reasons. to prevent tampering, safe to share strings between threads without synchronization.
+	
+	Q. adv of spring boot over SF. Spring boot has no XML, fast setup. comes with tomcat, jetty. it has actuators, health checks, metrics. rapid deployment using auto configuration.
+	
+	Q. annotations in spring boot
+		@SpringBootApplication, @EnableAutoConfiguration, @ComponentScan, 
+
+
+	SF - | Annotation        | Purpose                                                                    |
+| ----------------- | -------------------------------------------------------------------------- |
+| `@Component`      | Marks a class as a Spring-managed component.                               |
+| `@Controller`     | Marks a class as a web controller (MVC).                                   |
+| `@RestController` | Shortcut for `@Controller + @ResponseBody`. Used for REST APIs.            |
+| `@Service`        | Marks a service class (business logic layer).                              |
+| `@Repository`     | Marks a DAO/repository class (persistence layer). Also handles exceptions. |
+| `@Autowired`      | Injects dependencies automatically by type.                                |
+| `@Qualifier`      | Used with `@Autowired` to specify the bean by name.                        |
+| `@Value`          | Injects values from `application.properties`.                              |
+| `@Configuration`  | Declares a configuration class with bean definitions.                      |
+| `@Bean`           | Defines a bean manually inside a config class.                             |
+
+
+	@Configuration
+	class AppConfig{
+			
+            @Bean
+            public GreetingService greetingService()
+            {
+		return new GreetingService();
+	    }
+		
+        }
+
+	public class GreetingService {
+ 	public String greet(String name) {
+        return "Hello, " + name + "!";
+    	}
+	}
+
+	@Autowired
+	private GreetingService greetService;
+
+	SOP(greetService.greet("rachit"));   -> Hello, rachit
+  
+
+	Spring MVC - @GetMapping, @PostMapping, @PutMapping, @DeleteMapping, @RequestMapping, @PathVariable, @RequestBody, @ResponseBody
+
+
+	Q. Life cycle of thread
+	1. New -> Thread t = new Thread();
+	2. Runnable - thread might be running or ready to run at any instant of time.
+		t.start();
+	3. blocked - thread is bloced when its trying to acquire a lock but lock is acquired by another thread. e.g., in synchronized blocks
+	4. waiting - thread is waiting using wait()
+	5. terminated - thread has finished execution.
+	
+	Q. what are servlets ?
+	Servlet is a Java class that runs on a web server and handles HTTP requests and responses. its part of Java EE/ jakarta EE and used to create dynamic web pages.
+		
+		servlet listens at Url /hello
+		When the server receives a GET request to /hello, the doGet() method is called.
+		It responds with plain text:
+		"Hello from servlet!"
+		
+		@WebServlet("/hello")
+		public class HelloServlet extends HttpServlet {
+			protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		   res.getWriter().write("Hello from servlet!");
+			}
+		}
+		
+		Spring boot has lots of XML based config while Spring boot has min. it provided various mappings.
+	
+	Q. diff levels of caching - aching is used to store frequently accessed data in memory to improve performance
+	1. in memory caching - data is stored in heap memory ex hashmap
+	2. application level caching - Uses annotations like @Cacheable, @CachePut
+	3. distributed caching - Data is cached across multiple servers., Suitable for microservices and scalable apps.
+	
+	Use @Cacheable to cache method results:
+	
+	@Service
+	public class UserService {
+
+		@Cacheable("users")
+		public User getUserById(Long id) {
+			simulateSlowService(); // Imagine DB or API call
+			return userRepository.findById(id).orElse(null);
+		}
+	}
+	
+
+	Q. what is classpath in java
+	classpath is the path which tells the JVM, java compiler where to look for 
+		user defined classes, compiled .class files, jar files.
+	if class is not found at classpath, ClassNotFOundException is thrown
+
+	Q. what are class loaders. 
+	class loader in java is part of JVM which loads the .class files compiled java byte code files into memory when needed.
+	
+	The JVM doesn't know about .class files until the class loader loads them.
+
+		The loading process follows a three-step model:
+
+		Loading – Finds the .class file and loads bytecode into memory.
+
+		Linking
+
+		Verification: Ensures bytecode is valid and doesn't break security.
+
+		Preparation: Allocates memory for static variables.
+
+		Resolution: Replaces symbolic references with actual references.
+
+		Initialization – Static blocks and static variables are initialized.
+	
+		typed of class loaders:-
+		1. bootstrap class loader - Loads core Java classes (java.lang, java.util, etc.)
+		2. extension classloader - loads classes from lib/ext directory
+		3. appl class loader - loads the classes from classpath.
+		
+		
+		public class AppClassLoaderExample {
+
+   	
+		}
+		ClassLoader classLoader = AppClassLoaderExample.class.getClassLoader();
+
+C
+		Class<?> userClass = classLoader.loadClass("AppClassLoaderExample");
+		SOP(userClass.getName()); 
+		
+
+	Q. Alien obj = new Alien();
+	   obj.setAid(101); obj.setAName("rachit"); obj.setColor('red');
+	   
+	   Configuration con = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Alien.class);
+	   SessionFactory sf = con.buildSessionFactory():
+
+		 a Session is the main interface between your Java application and the database. It represents a single unit of work and is responsible for persisting, retrieving, updating, and deleting Java objects mapped to database tables.p
+	   
+	   
+	   Session sess = sf.openSession(): 
+	   Transaction tx = sess.beginTransaction();
+	   sess.save(tx);
+	   
+	   tx.commit();
+	
+	Q. activities done in DB design.
+	Activities in Database Design:
+		Requirements gathering
+
+		Entity-relationship modeling
+
+		Normalization
+
+		Choosing primary/foreign keys
+
+		Designing tables, constraints
+
+		Indexing
+
+		Security/access control
+
+		Performance optimization
+	
+	Q. how to handle exceptions in spring boot, use COntrollerAdvise and ExceptionHandler
+	
+		@ControllerAdvice
+		public class CloudVendorExceptionHandler {
+
+			@ExceptionHandler(value = {CloudVendorNotFoundException.class})
+			public ResponseEntity<Object> handleCloudVendorNotFoundException(CloudVendorNotFoundException cloudVendorNotFoundException)
+			{
+				CloudVendorException cloudVendorException = new CloudVendorException(
+						cloudVendorNotFoundException.getMessage(),
+						cloudVendorNotFoundException.getCause(),
+						HttpStatus.NOT_FOUND
+				);
+
+				return new ResponseEntity<>(cloudVendorException,HttpStatus.NOT_FOUND);
+			}
+
+			// @ControllerAdvice tells Spring that this class will handle exceptions globally across all controllers.
+			// @ExceptionHandler registers this method to be automatically invoked when a CloudVendorNotFoundException is thrown by any controller.
+		}	
+	
+	Q. static class loading. happends at compile time. 
+		// Car car = new Car(); // Car class is statically loaded
+		
+		dynamic class loading, happends at runtime.
+		classname is not known at compile time.
+		
+		Class<?> clazz = Class.forName("com.example.Car");
+		Object car = clazz.getDeclaredConstructor().newInstance();
+		
+	Q. Transactional 
+	
+	@Service
+	public class BankService {
+
+		@Autowired
+		private AccountRepository accountRepository;
+
+		@Transactional
+		public void transferMoney(Long fromAccountId, Long toAccountId, double amount) {
+			Account from = accountRepository.findById(fromAccountId).orElseThrow();
+			Account to = accountRepository.findById(toAccountId).orElseThrow();
+
+			from.setBalance(from.getBalance() - amount);
+			to.setBalance(to.getBalance() + amount);
+
+			accountRepository.save(from);
+			accountRepository.save(to);
+
+			// If any exception occurs, the entire transaction will be rolled back
+		}
+	}
+	
+	Q. types of DI
+		Constructor Injection ✅ Recommended
+
+		Setter Injection
+
+		Field Injection (with @Autowired) – discouraged for testability
+		
+	Q. Immutable: Cannot change state after creation.
+			Example: String, Integer
+			
+	    mutable objects - can be modified - ex Stringbuilder.
+	
+	Q. what is web server - 
+		Web servers and application servers have distinct yet often complementary roles in delivering web content and applications. Web servers primarily handle HTTP requests and serve static content like HTML, CSS, and images ex nginx http server. Application servers, on the are designed to handle more complex tasks, such as processing user requests, executing business logic, interacting with 			databases, and generating dynamic content
+		
+	Q. how threads communicates with each other - using notify(), wait() objects.
+	
+	Q. git stash
+		Temporarily saves uncommitted changes (tracked files) and restores a clean working directory.
+
+		Useful when switching branches without committing WIP changes.
+	
+		git stash       # Save
+		git stash pop   # Restore
+	
+	Q. what is return type of run() in runnable interface
+	 void
+	 
+	Q. how to connect with multiple DB's/ schemas in JPA application.properties.. multiple DB configs
+		spring.datasource.url=jdbc:mysql://localhost:3306/primary_db
+		spring.datasource.username=root
+		spring.datasource.password=pass
+
+		second.datasource.url=jdbc:mysql://localhost:3306/secondary_db
+		second.datasource.username=root
+		second.datasource.password=pass
+		
+		@Configuration
+		@EnableTransactionManagement
+		public class PrimaryConfig{
+		
+			@Primary
+			@Bean
+			@ConfigurationProperties("spring.datasource")
+			public DataSource primaryDataSource() {
+				return DataSourceBuilder.create().build();
+			}
+		
+		}
+		
+		@Configuration
+		@EnableTransactionManagement
+		public class SecondConfig{
+		
+			@Primary
+			@Bean
+			@Configuration("second.datasource")
+			public DataSource primaryDataSource() {
+				return DataSourceBuilder.create().build();
+			}
+		}
+		
+	
+	Q. how to connect with diff environments
+	
+	create the profiles under src/main/resources
+	application.properties → Default config
+
+	application-dev.properties → Dev profile
+
+	application-prod.properties → Prod profile
+
+
+application-dev.properties
+
+	# ---------- Server Settings ----------
+server.port=8081
+server.servlet.context-path=/myapp
+
+# ---------- Database Settings ----------
+spring.datasource.url=jdbc:mysql://localhost:3306/dev_db
+spring.datasource.username=dev_user
+spring.datasource.password=dev_password
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# ---------- JPA / Hibernate Settings ----------
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+
+# ---------- Logging ----------
+logging.level.root=INFO
+logging.level.org.springframework.web=DEBUG
+logging.file.name=logs/dev-app.log
+
+# ---------- Custom Application Properties ----------
+app.feature-x.enabled=true
+app.service.timeout=5000
+
+# ---------- Mail (example) ----------
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=your-email@gmail.com
+spring.mail.password=your-password
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+
+
+	we can activate a pprofile via application.properties file use here-> spring.profiles.active = dev
+
+
+	Q. advantages of Inversion of control
+	1. centralized config using annotations or XML. spring handles all the wiring via annotations or xml based.
+	2. decouples object creation from business logic
+	3. increases testability - we can use mock dependencies for easy unit testing
+	
+	Q. artificate type after build in spring boot
+	default is jar file
+	
+	Q. Why is String immutable? - thread safe, security
+	
+	Q. thread pool management is done using ExecutorService. ExecutorService executorService = Executors.newFixedThreadPool(1);
+		// max 1 thread can run
+	
+	Q. what is bean lifecycle
+	scopes - singleton, prototype. singleton - one instance per spring container. prototype - new instance each time requested.
+	
+	lifecycle = dependency injection, postconstruct @postconstruct and then predestroy
+	
+	Q. @GetMapping("/search")
+	   public ResponseEntity<?> search(@RequestParam String name, @RequestParam Integer age)
+	   {	
+		return userService.searchUser(name, age);
+	   }
+
+	   @GetMapping("/{id}")
+    	   public User getUserById(@PathVariable Long id) {
+        		return userService.getUserById(id);
+    	  }
+
+		// path variable is part of URL path, used for structured path data.
+		// requestparam used for optional filters, search etc.
+
+	Q. WHAT is SOAP API - its secure, transactional.all requests, responses are in XML format. can use HTTP, SMTP formats.
+	// used for exchanging data in structured format. in XML format.
+	
+	
+	SOAP request
+	<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+					  xmlns:bank="http://bank.example.com/">
+	   <soapenv:Header/>
+	   <soapenv:Body>
+		  <bank:getAccountBalance>
+			 <bank:accountNumber>123456789</bank:accountNumber>
+			 <bank:pin>1234</bank:pin>
+		  </bank:getAccountBalance>
+	   </soapenv:Body>
+	  
+	</soapenv:Envelope>
+	
+		SOAP response
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:bank="http://bank.example.com/">
+		<soapenv:Body>
+		  <bank:getAccountBalanceResponse>
+			 <bank:balance>25000.50</bank:balance>
+		  </bank:getAccountBalanceResponse>
+	   </soapenv:Body>
+	</soapenv:Envelope>
+
+	REST API
+	REST API to fetch user details.
+	
+	REST Request. GET /api/users/123 HTTP/1.1
+				  Host: example.com
+				   Authorization: Bearer eyJhbGciOiJIUzI1...
+	
+	REST - It's lightweight, fast, and supports multiple formats (mostly JSON), ideal for modern applications and microservices.
+	
+	JSON response.
+	{
+	  "id": 123,
+	  "name": "John Doe",
+	  "email": "john.doe@example.com",
+	  "createdAt": "2023-08-01T10:30:00Z"
+	}
+	
+	Q.  Microservice to microservice communication
+	2 ways - synchronous and asynchronous communication.
+	
+	Q. what are Rest templates. 
+	it is used to call REST API's from your java application.
+	
+	1. GET request - 
+	RestTemplate restTemplate = new RestTemplate();
+	User user = restTemplate.getForObject("http://localhost:8080/users/1", User.class);
+	
+	2. POST request
+	User newuser = new User("john", "doe");
+	User createdUser = restTemplate.postForObject("http://localhost:8080/users", newUser, User.class);
+	
+	
+	Q. different entity states in JPA
+	transient - new object. not associated with any session
+	persistent - using save(), persist()
+	detached - no longer associated with any session
+	removed - marked for deletion from DB.
+	
+	Q. what are diff states in JPA
+	
+	State	Description
+	Transient	New object, not associated with persistence context
+	Persistent	Associated with persistence context (e.g., after persist())
+	Detached	Was persistent, now no longer in persistence context
+	Removed	Marked for deletion from DB
+
+	Q. to compile a java program
+	javac Myprogram.java
+
+	run the compiled code using java Myprogram
+	
+	Q. HashMap uses hashCode() to find bucket and equals() to resolve collisions.
+	If you don’t override them for custom objects (as keys), even logically equal objects will go into different buckets, causing unexpected behavior (duplicate keys)
+	
+	Q. Deploying Java on Windows and Linux — Separate Compilation?. java is platform independent lang
+	1. compile once .class or .jar file nd run anywhere.
+	
+	Q. what are web filters. - component which intercepts requests/responses before reaching controller.
+	used for loggin and authentication.
+	
+	@WebFilter("/api/*")
+	public class MyFilter implements Filter{
+		
+		public void doFilter(...)
+		{
+			chain.doFilter(request, response);
+		}
+	}
+	
+	Q. what are webfilters -  it intercepts http requests going to path matching /api/*. 
+	
+	@WebFilter("/api/*")
+	public class MyFilter implements Filter{
+		
+		@Override
+		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+
+        // ✅ Pre-processing logic (before the request hits controller)
+        System.out.println("Request intercepted before reaching controller");
+
+        // 🔁 Pass control to next filter or target controller
+        chain.doFilter(request, response);
+
+        // ✅ Post-processing logic (after the response comes back)
+        System.out.println("Response intercepted after controller processing");
+    }
+	
+	}
+	
+	when request comes to /api/something. MyFilter intercepts it.
+	For a URL: GET /api/users
+	console output will be :-
+	Request intercepted before reaching controller
+	Response intercepted after controller processing
+	
+	
+	Q. what is commandlinerunner - logic executed on every spring boot startup.
+	
+	@Component
+	public class StartupTask implements CommandLineRunner {
+    @Override
+    public void run(String... args) {
+        System.out.println("Run once on startup.");
+    }
+	}
+
+
+
+How Spring Boot supports transaction management?
+
+Spring Boot uses @Transactional to manage transactions.
+
+It supports declarative transaction management via annotations or AOP.
+
+Uses Spring Data JPA or JDBC behind the scenes.
+
+Example:
+
+@Transactional
+public void saveData() {
+    repository.save(entity);
+}
+What is a Marker Interface?
+
+An interface with no methods or fields. It is used for metadata or identification purpose. 
+
+Examples: Serializable, Cloneable.
+
+Q  how provide metadata to Spring containers? metadata refers to information provided to the Spring container that tells it:
+
+“What beans to create, how to wire them, what their lifecycle is, and how they should behave.”
+There are 3 ways to define beans
+
+1. using XML file --application.context
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="myService" class="com.example.MyService"/>
+</beans>
+
+2. annotations like @Component, @Service, @Repository, @COntroller are used to mark classes as beans. Spring scans for annotated classes and manages them as beans.
+3. using java based configs.
+
+declare beans using @bean
+
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public MyService myService() {
+        return new MyService();
+    }
+}
+
+
+
+Q. How JWT Authentication works?
+
+User logs in → server returns JWT token.
+
+Client sends token in Authorization header.
+
+Server validates token (signature + expiry).
+
+On success, allows access to protected resources.
+
+🔨 Development Practices
+JSP change done, how to push to Bitbucket?
+
+bash
+Copy
+Edit
+git add .
+git commit -m "Updated JSP"
+git push origin branch-name
+Where do you deploy the application after build?
+
+Common servers: Tomcat, WildFly, Jetty, Nginx (reverse proxy).
+
+Cloud: AWS EC2, Elastic Beanstalk, Heroku, GCP App Engine.
+
+Why static methods are not overridden?
+
+They belong to class, not instance.
+
+Method hiding happens, not overriding.
+
+Runtime polymorphism doesn't apply to static methods.
+
+Q. lazy loading in hibernate
+
+@Entity
+public class Department{
+
+     @OneToMany(mappedBy="department", fetch = FetchType.LAZY)
+     private List<Employee> employee;
+}
+
+
+Department dept = session.get(Department.class, 1L);
+List<Employee> list = dept.getEmployees();  now the query is fired
+
+// eager loading
+
+@Entity
+public class Department {
+    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
+    private List<Employee> employees;
+}
+
+Department dept = session.get(Department.class, 1L);
+// all employees are loaded along with department
+
+Helps in performance, avoids heavy joins.
+
+Q.namic vs Static Loading in Java
+
+Static: Classes loaded at compile-time.
+
+Dynamic: Using Class.forName() or reflection at runtime.
+
+Purpose of Generics in Java
+
+Enables type safety, code reuse, eliminates type casting.
+
+List<String> list = new ArrayList<>();
+🔗 Architecture
+Is it microservice architecture if all endpoints are in Spring Boot and Angular is calling them?
+
+No. It’s monolithic if all endpoints are in one deployable unit.
+
+Microservices = multiple, independent deployables, ideally with separate databases.
+
+How to handle exception in Spring Controller?
+
+Use @ControllerAdvice with @ExceptionHandler:
+
+java
+Copy
+Edit
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handle(Exception ex) {
+        return ResponseEntity.status(500).body(ex.getMessage());
+    }
+}
+JPA vs JDBC Template?
+
+JPA: High-level ORM abstraction (less boilerplate, entity management).
+
+JDBC Template: Manual control, better for complex queries.
+
+Choose JPA for standard CRUD apps, JDBC Template for fine-tuned SQL.
+
+How to deploy WAR in different environments like DEV/SIT?
+
+Configure separate application-dev.yml, application-sit.yml.
+
+Use:
+
+mvn clean package -Dspring.profiles.active=dev
+Deploy WAR to environment-specific Tomcat/EC2 server.
+
+If generics are erased at runtime, why use them?
+
+when we compile Java generic code, the type information is erased at runtime. This is known as type erasure.  List<String> list = new ArrayList<>(); at runtime it becomes
+List list = new ArrayList();
+
+despite runtime erasure, generics are useful at compile time to catch type errors at compile time.
+
+List<String> list = new ArrayList<>();
+list.add("Hello");
+// list.add(123); // ❌ Compile-time error
+
+String s = list.get(0); // ✅ No casting needed
+
+
+
+
+How is String helpful in memory management?
+
+String Pooling: Common literals reused.
+
+Immutable: Safe for concurrent usage.
+
+Reduces memory footprint by reusing instances.
+
+Q. ch API method for bulk uploads?
+
+@RestController
+@RequestMapping("/upload")
+public class FileUploadController{
+ 
+ @PostMapping("/multiple")
+ public ResponseEntity<String> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files)
+{
+   for(MultiPartFile file : files)
+    {
+
+	can save the file here in DB
+    }
+	
+}
+
+}
+
+Use streaming to process files in memory-efficient way.
+
+📦 Testing & Design
+Challenges in writing JUnit Tests?
+
+Mocking dependencies (@MockBean, Mockito).
+
+Testing security, JWT-protected endpoints.
+
+DB interaction issues → use H2 or TestContainers.
+
+What are Interceptors?
+
+Used to intercept requests/responses.
+
+Common in Spring MVC:
+
+public class MyInterceptor implements HandlerInterceptor {
+    public boolean preHandle(...) { ... }
+}
+Useful for logging, authentication, etc.
+
+How to consume data from one microservice in another?
+
+Use RestTemplate, WebClient, or FeignClient:
+
+@FeignClient(name = "user-service")
+public interface UserClient {
+
+    @GetMapping("/api/users/{id}")
+    User getUserById(@PathVariable("id") Long id);
+}
+
+@RestController
+public class OrderController {
+
+    private final UserClient userClient;
+
+    public OrderController(UserClient userClient) {
+        this.userClient = userClient;
+    }
+
+    @GetMapping("/order/user/{id}")
+    public String getUserFromOrderService(@PathVariable Long id) {
+        User user = userClient.getUserById(id);
+        return "User from Feign: " + user.getName();
+    }
+}
+
+💡 Java & SQL
+What is ConcurrentModificationException?
+
+its a runtime exception which occurs Thrown when modifying a collection while iterating.
+
+List<String> list = new ArrayList<>();
+list.add("A"); list.add("B");
+
+for(String item : list)
+{
+    if(item.equals("A"))
+     {
+	list.remove(item); its a runtime exception which occurs when a collection is modified while iterating over it.
+     }	
+}
+
+Avoid by using Iterator.remove() or CopyOnWriteArrayList.
+
+Difference between HAVING and WHERE in SQL
+
+WHERE: Filters before grouping.
+
+HAVING: Filters after GROUP BY.
+
+Difference between Streams and Collections
+
+Collections: Data structure
+
+Streams: Data processing pipeline
+
+Stream is lazy, supports map/filter/reduce.
+
+Return in try block – will finally execute?
+
+Yes, finally always executes even if try returns.
+
+java
+Copy
+Edit
+try {
+    return 1;
+} finally {
+    System.out.println("Finally runs");
+}
+
+System.exit() - immediately terminate the JVM. it will not exeuet the finally block		
+
+Q. various scopes of Beans
+1. singleton - only 1 instance of Bean is created per spring container
+@Scope("singleton")
+2. prototype - A new instance is created every time the bean is requested.
+@Scope("prototype")
+
+3. Request/Web only - a new bean is created per HTTP request. Tied to the lifecycle of an HTTP request.
+@Scope("request")
+
+4. Session web only - a single bean is per HTTP session. it is tied to user's session
+@Scope("session")
+
+
+Q. SOLID principles
+The SOLID principles are five key object-oriented design principles that help make software more understandable, flexible, and maintainable.
+
+// ❌ Bad: This class does too many things
+class Report {
+    void generateReport() {}
+    void saveToPDF() {}
+    void sendEmail() {}
+}
+
+// ✅ Good: Separate responsibilities
+class ReportGenerator { void generateReport() {} }
+class ReportSaver { void saveToPDF() {} }
+class EmailSender { void sendEmail() {} }
+
+2. pen/Closed Principle (OCP)
+You should be able to extend functionality without modifying existing code.
+ O- class should be open for extensions and closed for modification
+
+// ❌ Violates OCP
+class Payment {
+    void pay(String type) {
+        if (type.equals("credit")) { /*...*/ }
+        else if (type.equals("paypal")) { /*...*/ }
+    }
+}
+
+// ✅ OCP via polymorphism
+interface PaymentMethod { void pay(); }
+
+class CreditCard implements PaymentMethod {
+    public void pay() { /*...*/ }
+}
+
+class PayPal implements PaymentMethod {
+    public void pay() { /*...*/ }
+}
+
+3. Subclasses should behave like their parents.
+
+// ✅ Subclass can replace superclass
+class Bird { void fly() {} }
+
+class Sparrow extends Bird { }   // ✅ OK
+
+class Ostrich extends Bird {
+    void fly() { throw new UnsupportedOperationException(); } // ❌ Violates LSP
+}
+Fix: Avoid inheritance when behavior differs.
+
+4. Interface Segregation Principle (ISP)
+Don’t force a class to implement methods it doesn’t use.
+
+// ❌ Bad: Fat interface
+interface Animal {
+    void fly();
+    void run();
+}
+
+// ✅ Good: Split interfaces
+interface Flyable { void fly(); }
+interface Runnable { void run(); }
+
+class Dog implements Runnable { public void run() {} }
+class Bird implements Flyable, Runnable {
+    public void fly() {}
+    public void run() {}
+}
+
+
+5. Dependency Inversion Principle (DIP)
+
+// ❌ Tight coupling
+class MySQLDatabase {
+    void connect() {}
+}
+class UserService {
+    MySQLDatabase db = new MySQLDatabase();
+}
+
+// ✅ DIP using interface
+interface Database {
+    void connect();
+}
+
+class MySQLDatabase implements Database {
+    public void connect() {}
+}
+
+class UserService {
+    private final Database db;
+    public UserService(Database db) {
+        this.db = db;
+    }
+}
+
+Q. what are synchronized maps
+Map<K, V> originalMap = new HashMap<>();
+Map<K, V> syncMap = Collections.synchronizedMap(originalMap);
+
+// A synchronized map ensures thread-safe access to a Map, meaning only one thread can access it at a time.
+
+in synchronized maps - 1 null key and multiple null values are allowed. while in ConcurrentHashMap its not allowed.
+concurrent hashmap allows multiple threads to access and modification
+performance wise concurrent hash maps are faster due to concurrent access.
+
+Q. how to make a collection as thread safe
+
+use synchronized 
+
+List<String> list = Collections.synchronizedList(new ArrayList<>());
+Set<String> set = Collections.synchronizedSet(new HashSet<>());
+Map<String, String> map = Collections.synchronizedMap(new HashMap<>());
+
+
+Q. What Happens If You Don't Override equals() and hashCode() in HashMap
+it will lead to duplicate stores. incorrect bucket access, and can return null while retrieving values.
+
+
+
+Q. in case of POST mappings, how to retrieve data into code. 
+Use the following annotations:
+
+@RequestBody → for JSON/form body payload.
+
+@RequestParam → for query parameters.
+
+@PathVariable → for URL path parameters.
+
+java
+Copy
+Edit
+@PostMapping("/user/{id}")
+public ResponseEntity<String> createUser(
+        @PathVariable Long id,
+        @RequestParam String type,
+        @RequestBody UserDto userDto) {
+    // logic
+}
+
+
+Q. For GET requests, what annotation is used to retrieve data into code?
+
+@RequestParam → for query string: ?name=John
+
+@PathVariable → for path: /user/{id}
+
+@GetMapping("/user/{id}")
+public User getUser(@PathVariable Long id, @RequestParam(required=false) String type)
+{
+
+}
+
+Q. 3. What are different bean scopes in Spring? When to use which?
+Scope	Description	When to Use
+singleton	One shared instance per spring container. when bean dont hold session specific data. shared across the app
+prototype	New instance is created everytime its requested.  when each user//task needs a fresh object
+request	One bean per http request. when data is required only during lifecyccyle of http request
+session	One per HTTP session	Session-scoped beans. one bean per user session, to store user specific data l
+
+
+Q. have you written any unit test using JUnit and Mockito ?
+Mocking dependencies using @Mock or Mockito.mock().
+
+Using @InjectMocks to inject into the class under test.
+
+Challenges faced:
+
+Handling NullPointerException when mocks aren't set up properly.
+
+1. ensure using @InjectMocks for the class you are testing.
+	@InjectMocks
+	priate UserService userService;
+
+2. ensure mocks are initialized using @ExtendWith(MockitoExtension.class)
+
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
+    // mocks and test
+}
+
+
+Q. If a Set has duplicate custom objects (not primitives), will it remove them?
+Only if equals() and hashCode() are properly overridden, it will consider both the objects are same and duplicate will be removed.
+else it will consider them as different.
+
+ex
+	Set<Persont = new HashSet<>();
+        set.add(new Person("Alice", 25));
+        set.add(new Person("Bob", 30));
+        set.add(new Person("Alice", 25)); // duplicate
+
+        System.out.println("Set size: " + set.size());
+        System.out.println("Set content: " + set);
+
+@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person p = (Person) o;
+        return age == p.age && Objects.equals(name, p.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+
+Q. Can HashMap have duplicate keys or values?
+key cant be duplicate. only values can be duplicated
+
+Q. example of static headers. in any application, we have 20  rest controllers and in response header will have static headers. how will you avoid to touch all the controllers and servce specific controllers.
+
+ static headers (like X-App-Version, X-Correlation-ID, Cache-Control, etc.) that need to be added to every HTTP response, and you want to avoid modifying each of your 20+ controllers, the best solution is to use a Spring Filter or Interceptor.
+
+@Component
+public class StaticHeaderFilter implements Filter{
+
+    @Override
+    public void doFIlter(ServletRequest request, ServletResponse response,
+                         FilterChain chain) throws IOException, ServletException
+    {
+	
+	HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
+        httpServletResponse.setHeader("X-App-Version", "1.0");
+        httpServletResponse.setHeader("X-Powered-By", "Spring Boot");
+        httpServletResponse.setHeader("Cache-Control", "no-cache");
+
+        chain.doFilter(request, response); // Pass control to controller
+
+    }
+
+}
+
+@RestController
+@RequestMapping("/api")
+public class HelloController {
+
+    @GetMapping("/hello")
+    public ResponseEntity<String> sayHello() {
+        return ResponseEntity.ok("Hello from Spring Boot");
+    }
+}
+
+
+GET http://localhost:8080/api/hello
+
+HTTP response
+
+HTTP/1.1 200 OK
+Content-Type: text/plain
+X-App-Version: 1.0
+X-Powered-By: Spring Boot
+Cache-Control: no-cache
+Content-Length: 24
+Date: Mon, 08 Jul 2025 10:30:00 GMT
+
+Hello from Spring Boot
+
+
+
+Q. What happens if value is immutable in HashMap?
+
+An immutable object (like String, Integer, etc.) cannot be modified once created.
+
+String str = "abc";
+str.toUpperCase(); // returns a new String, doesn't modify "abc"
+
+Map<String, String> map = new HashMap<>();
+map.put("key1", "abc");  // "abc" is an immutable String
+
+// Now:
+String value = map.get("key1"); // value = "abc"
+value.toUpperCase();           // returns "ABC", but "abc" is not changed in map
+
+System.out.println(map.get("key1"));  // still prints "abc"
+
+Q. difference between hibernate and JPA
+Hibernate is a JPA implementation, but it adds powerful features that JPA doesn’t define. 
+It provides operations for CRUD.. save(), update(), delete(). caching to avoid hitting the DB repeatedly. Lazy Loading (@Lazy)
+
+1. Create
+
+Session session = sessionFactory.openSession();
+session.beginTransaction();
+
+User user = new User();
+user.setName("John");
+session.save(user);
+
+session.getTransaction().commit();
+session.close();
+2. Read
+
+User user = session.get(User.class, 1L); // or session.load()
+
+3. Update
+user.setName("Jane");
+session.update(user);
+
+
+4. Delete
+session.delete(user);
+
+JPA is a specification or blueprint. hibernate is implementation. JPA does not provide any implementation.part of Jakarta EE
+JPA helps in mapping java classes to DB tables and perform CRUD operations. to actually use JPA, we need an implementation like Hibernate. 
+examples - @Entity, @Table, @Id, @OneToOne / @OneToMany / @ManyToOne	Relationships between entities
+
+
+Q. API1 expects 1 input, API2 expects 2 inputs. How to write logic?
+
+@RestController
+public class APIController{
+
+   @GetMapping("/api")
+    public ResponseEntity<?> handleApi(@RequestParam(required = false) String id1,
+                                       @RequestParam(required = false) String id2) {
+        if (id2 == null) {
+            return singleIdLogic(id1);
+        } else {
+            return twoIdLogic(id1, id2);
+        }
+    }
+    
+    private ResponseEntity<?> singleIdLogic(String id1) {
+        if (id1 == null || id1.isBlank()) {
+            return ResponseEntity.badRequest().body("Missing required parameter: id1");
+        }
+
+        // Simulate business logic for API1
+        String message = "API1 processed with id1 = " + id1;
+        return ResponseEntity.ok(message);
+    }
+
+    // Handles logic when both id1 and id2 are provided
+    private ResponseEntity<?> twoIdLogic(String id1, String id2) {
+        if (id1 == null || id1.isBlank() || id2 == null || id2.isBlank()) {
+            return ResponseEntity.badRequest().body("Both id1 and id2 are required for API2");
+        }
+
+        // Simulate business logic for API2
+        String message = "API2 processed with id1 = " + id1 + ", id2 = " + id2;
+        return ResponseEntity.ok(message);
+    }
+
+
+}
+
+
+Q. If an exception occurs in DAO, how to cascade it to UI?
+Throw custom exceptions and use @ControllerAdvice for global exception handling.
+
+Q. challenge failed during deployment
+App failed to start due to port already in use. Changed port in application.properties or killed conflicting process
+
+1. environment config issues
+a) application works locally fails on staging production
+   cause is missing incorrect variables like DB urls, credentials ports
+Spring Boot app fails to start because application-prod.properties is misconfigured.
+
+b) dependency mismatch
+  app crashes with classnotfoundexception App built with Java 17 but deployed on server with Java 11.
+
+c) port confilicts
+Another process is already running on the desired port (e.g., 8080).Stop conflicting process or change app port in application.properties
+
+Q. database not connecting
+added driver dependency mysql-connector-java).
+
+Updated application.properties with correct credentials and URL.
+	
+Q. Challenges While Creating APIs
+1.equestBody mapped to a null object.. DTO fields were missing setters or improper JSON sent.
+
+2, hitting users with POST worked but with GET it didn't worked.
+
+Fix: Ensured correct @GetMapping, @PostMapping, etc. with matching URLs.
+
+2 Pagination/Sorting Not Working
+API returned all records, no pagination.
+
+
+Pagination is used to return a subset of data rather than the entire result set. This improves performance, especially for large tables or APIs returning lists.
+
+@GetMapping
+public Page<User> getAllUsers(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "5") int size,
+    @RequestParam(defaultValue = "id") String sortBy
+)
+
+{
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return userRepository.findAll(pageable);
+}
+
+page is page number to fetch ex 0 is first page. size is number of records to fetch per page
+sortBy is sort the results by name, email
+
+
+Q. real use of singleton and prototype scope
+
+
+
+Q. interface has 2 subclasses and a third class autowires the interface. what happens
+
+interface Vehicle {}
+@Component class Car implements Vehicle {}
+@Component class Bike implements Vehicle {}
+@Component class TransportService {
+    @Autowired
+    private Vehicle vehicle;
+}
+
+spring throws NoUniqueBeanDefinitionException, because it doesn't know to inject Car or Bike
+
+1. 
+@Autowired
+@Qualifier("car") // or "bike"
+private Vehicle vehicle;
+
+2. @Primary
+   @Component
+   class Car implements Vehicle {}
+
+Q. difference between singleton scope and prototype scope
+one instance for entire application is created per spring container.
+
+Is shared across the application (singleton).
+
+package com.example.logging;
+
+import org.springframework.stereotype.Component;
+
+@Component  // Default scope is singleton
+public class LoggerService {
+
+    public void logInfo(String message) {
+        System.out.println("[INFO] " + message);
+    }
+
+    public void logError(String message) {
+        System.err.println("[ERROR] " + message);
+    }
+}
+
+Q. what is @Prototype Bean scope example
+@Component
+@Scope("prototype")
+public class Invoice {
+    private final String invoiceId;
+
+    public Invoice() {
+        this.invoiceId = UUID.randomUUID().toString();
+        System.out.println("Created Invoice: " + invoiceId);
+    }
+
+    public String getInvoiceId() {
+        return invoiceId;
+    }
+}
+
+@Service
+public class OrderService {
+
+    @Autowired
+    private ObjectFactory<Invoice> invoiceFactory;
+
+    public void placeOrder(String customerName) {
+        Invoice invoice = invoiceFactory.getObject(); // Fresh instance will be created everytime
+        System.out.println("Placing order for " + customerName + " with invoice " + invoice.getInvoiceId());
+    }
+}
+
+Each time a customer places an order, you want to generate a new Invoice object — independent from other requests.
+
+Q. Function<T, R>  Tkes one argument of type T and returns a result of type R
+
+Function<String, Integer> strLength = str -> str.length();
+System.out.println(strLength.apply("hello"));
+
+
+2. Predicate<T>
+
+Predicate<Integer> isEven = num -> num % 2 == 0;
+System.out.println(isEven.test(4));
+
+3. Consumer<T> Takes one argument and returns nothing (void).
+
+Consumer<String> greet = name -> System.out.println("Hello, " + name);
+greet.accept("rachit");
+
+4. BiFunction<T, U, R>
+
+BiFunction <Integer, Integer, Integer> sum = (a, b) -> a + b;
+
+System.out.prinln(sum.apply(10, 20));
+
+5. BiPredicate<T, U> 	takes two arguments and returns Boolean
+
+BiPredicate<String, Integer> isLengthEqual = (str, len) -> str.length() == len;
+
+SOP(isLengthEqual.test("hello", 5));
+
+6. Consumer<String> greet = name -> System.out.println("Hello, " + name);
+	greet.accept("rachit");
+
+7. it takes 2 arguements nd returns boolean
+  BiPredicate<String, Integer> isLengthEqual = (str, len) -> str.length() == len;
+   
+   SOP(isLengthEqual.test("hello", 5));
+
+
+8. what is DB connection pool
+A Database Connection Pool is a cache of database connections maintained so that connections can be reused when future requests to the database are required.
+
+Instead of creating a new DB connection for every request (which is slow and expensive), a pool reuses pre-created connections.
+
+9. sortedDistinctMarks
+List<Integer> sortedDistinctMarks = students.stream()
+    .map(Student::getMarks)
+    .distinct()
+    .sorted(Comparator.reverseOrder())
+    .collect(Collectors.toList());
+
+
+
+
+10.ACID properies 
+Atomicity --    All operations succeed or none do.
+Consistency	DB moves from one valid state to another.
+Isolation	Concurrent transactions don't interfere.
+Durability	Once committed, the result is permanent.
+
+START TRANSACTION;
+
+UPDATE accounts SET balance = balance - 1000 WHERE account_id = 'A';
+
+UPDATE accounts SET balance = balance + 1000 WHERE account_id = 'B';
+
+COMMIT;
+
+Atomicity: Both debit and credit must happen. If credit fails, debit is rolled back.
+
+Consistency: The total amount in the system (A+B) remains the same before and after.
+
+Isolation: If another transaction checks Account A while the transfer is halfway, it should not see the intermediate state.
+
+Durability: Once the transfer is committed, it remains saved even after a system crash.
+
+Q. what are hibernate caching levels
+
+1. first level - enabled by default. per session cache, Same entity retrieved multiple times in the same session 
+2. second level - optional, must be enabled explicitly
+3. query cache - caches the results of queries.
+
+
+
+public class SecondHighestSalary {
+    public static void main(String[] args) {
+        List<Integer> salaries = Arrays.asList(5000, 7000, 6000, 7000, 8000, 8000, 9000);
+
+        Optional<Integer> secondHighest = salaries.stream()
+            .distinct() // remove duplicates
+            .sorted(Comparator.reverseOrder()) // sort descending
+            .skip(1) // skip highest
+            .findFirst(); // get second highest
+
+        secondHighest.ifPresent(sal -> System.out.println("Second highest salary: " + sal));
+    }
+}
+
+
+SELECT MAX(salary) AS SecondHighestSalary
+FROM employees
+WHERE salary < (
+    SELECT MAX(salary) FROM employees
+);
+
+
+Q. @SpringBootApplication = combines @Configuraion,@EnableAutoConfiguration, @ComponentScan
+
+it reduces the boiler plate code by bundling 3 annotations into 1,simplifies spring configuration. enabled auto confg of Spring boot
+
+package com.example.demo.service;
+
+@Component
+public class MyService{
+    
+	public String getMessage()
+	{
+	   return "Hello from MyServicce";
+	}	
+}
+
+
+
+@Configuration
+@ComponentScan("com.example.demo.servce")
+public class AppConfig{
+
+}
+
+
+class MainApp{
+
+   psvm()
+   {
+	ApplicationContext context = new ApplicationContext(MainApp.class);
+
+	MyService service = context.getBean(MyService.class);
+	service.getMessage();    Hello from MyServicce
+   }
+
+}
+
+
+Q. use of @Bean
+
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public RestTemplate restTemplate() {
+        // Custom configuration before returning
+        return new RestTemplate();
+    }
+}
+
+Anywhere you @Autowired a RestTemplate, you’ll get this instance.The method’s return value will be registered as a bean in the Spring ApplicationContext.
+
+Q. Immutable classes in Java and How do we implement one?
+
+declare class as final, make all fields as private and final, no setter methods. 
+
+final class Employee {
+    private final String name;
+    private final int id;
+
+    public Employee(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public String getName() { return name; }
+    public int getId() { return id; }
+}
+
+Q. How does immutability help in multithreading?
+Immutable objects are thread-safe by nature since their state cannot change. Multiple threads can access them without synchronization.
+
+Q. Purpose of serialization in a POJO and common use cases
+Serialization converts a Java object into a byte stream for:
+
+Sending over network (distributed systems)
+
+Saving to disk (persistence)
+
+Caching
+
+Q. challenges while sending java object over network.
+
+Compatibility (Java version, class changes)
+
+Performance
+
+Security (exposure of internal structure)
+
+
+Q. what is singleton patterns in java
+
+public class Singleton{
+	
+    private static Singleton instance = new Singleton();
+
+    private Singleton()
+    {
+
+    }
+
+    public static Singleton getInstance()
+    {
+       return instance;
+    }
+}
+
+Q. How to make Singleton thread-safe?
+
+public class Singleton {
+    private static volatile Singleton instance;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            synchronized (Singleton.class) {
+                if (instance == null)
+                    instance = new Singleton();
+            }
+        }
+        return instance;
+    }
+}
+
+Q. Override equals but not hashCode — what happens?
+then objects may be equal but stored in different buckets in a hashmap. causing unexpected beheviour like duplicates
+
+Q.Handle global exceptions in Spring Boot
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleAll(Exception e) {
+        return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+Q. Two beans of same type, no @Qualifier — what happens?
+Spring throws NoUniqueBeanDefinitionException
+
+
+Q. ckt breaker pattern
+
+@CircuitBreaker(name = "backendService", fallbackMethod = "fallback")
+public String fetchData()
+{
+	return restTemplate.getForObject("http://some-api", String.class);
+
+	// if above API fails due to any exception like timeout , 500 error than fallbackMethod will be called
+}
+
+public String fallback(Throwable t)
+{
+   return "fallback response";
+}
+
+Q. SQL query to count duplicates in a column
+
+select column_name, count(*)
+from table_name
+group by column_name
+having count(*) > 1;
+
+
+Q what are paralle streams.Java 8 introduced the Stream API, which allows you to process collections in a functional way.
+Normally, .stream() processes elements sequentially (one thread).
+.parallelStream() (or stream().parallel()) splits the work into multiple threads
+
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+
+// Sequential
+list.stream()
+    .forEach(System.out::println);
+
+// Parallel
+list.parallelStream()
+    .forEach(System.out::println); // Order not guaranteed
+
+Q. what is BeanInitialization exception
+
+A runtime exception thrown when Spring fails to create or initialize a bean during the application context startup.
+
+Missing dependencies (@Autowired fails due to no matching bean found).
+Circular dependencies (Bean A needs Bean B, which also depends on Bean A).
+
+Q. how to resolve circular dependencies.
+
+use @Lazy, spring will delay creating the bean until its really required.
+
+@Component
+class A {
+    @Autowired
+    @Lazy
+    private B b;
+}
+
+@Component
+class B {
+    @Autowired
+    @Lazy
+    private A a;
+}
+
+Q. Can Constructors be Synchronized?
+Yes, you can declare a constructor as synchronized, but it has no practical effect in the way you might think.
+The synchronized keyword on a constructor locks the object being constructed.
+
+public class MyClass {
+    public synchronized MyClass() {
+        System.out.println("Constructor is synchronized");
+    }
+}
+
+
+Q. returning both HTML views and JSON response from a single controller
+
+@Controller
+@RequestMapping("/products")
+public class ProductController {
+
+    // Returns HTML view
+    @GetMapping("/view")
+    public String showProductPage(Model model) {
+        model.addAttribute("name", "Laptop");
+        return "productView"; // maps to productView.html
+    }
+
+    // Returns JSON response
+    @GetMapping("/json")
+    @ResponseBody
+    public Product getProductJson() {
+        return new Product(1, "Laptop", 1200);
+    }
+}
+
+
+Q. Can a @Controller return String or JSON? How?
+
+String → Yes, by default, it's treated as the view name.
+
+
+use @ResponseBody on the method
+
+Q. use of @Autowired annotation
+
+<beans>
+    <bean id="orderService" class="com.example.OrderService" />
+    <bean id="paymentService" class="com.example.PaymentService" />
+</beans>
+
+@Component
+public class OrderService{
+	
+   @Autowired
+   private PaymentService service;
+	
+}
+
+
+
+Q. diff between PUT and PATCH 
+PUT will do full update of resource while PATCH does partial update
+
+Q. Design patten used in IOC is Dependency injection pattern
+
+Q. things to consider while creating API's
+1. http methods are correct - GET, POST, DELETE
+2. Input validation to avoid bad data
+3. use pagination, caching
+4. use authentication and authorization
+
+Q. how to secure API's
+verify who is the User - jwt, Oauth2, API keys
+do input sanitization
+HTTPS - always encrypr traffic
+
+
+@PreAuthorize("hasAuthority('USER_READ')")
+public List<User> getAllUsers() {
+ return userService.findAll();
+}
+
+
+If the logged-in user doesn’t have USER_READ authority, they’ll get a 403 Forbidden — instantly. No business logic is executed.
+
+hasAuthority() vs hasRole()
+ * hasAuthority('ADMIN') checks for exact authority
+ * hasRole('ADMIN') checks for authority with ROLE_ prefix (e.g. ROLE_ADMIN)
+
+
+Q. points to consider while mpving from monolithic to microservice arch
+
+split the services accordingly
+each MC should have its own DB
+inter service comm - REST, gPRC, messaging - kafka/RabbitMQ
+API G/W - central point for routing  requests to diff micro services
+service discovery use Eukera server
+deply strategy using CI/CD pipelines, containers Kubernetes
+
+
+Q. @OneToMany annotation
+
+1 dept multiple employees
+
+@Entity{
+public class Department{ 
+  
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+
+  @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+  private List<Employee> employees = new ArrayList<>();
+	
+   any operation you perform on parent entity wil also be performed on child entity.
+
+CascadeType.ALL is a shortcut for enabling all of these:
+
+PERSIST – Save the child entity when you save the parent.
+
+MERGE – Update the child entity when you update the parent.
+
+REMOVE – Delete the child entity when you delete the parent.
+
+REFRESH – Refresh child entity when you refresh the parent from DB.
+
+DETACH – Detach child entity from persistence context when parent is detached.
+
+}	
+
+    
+@Entity
+public class Employee{
+  
+   @Id
+   private Long id;
+
+   @ManyToOne
+   private Department department;
+
+}
+
+
+@Entity
+public class Student{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @ManyToMany(cascase = CascadeType.ALL)
+    private Set<Course> courses = new HashSet<>();
+
+}
+
+
+Q. explain normalization - process to remove redundancy and ensure data integrity by organizaing data into separate tables.
+various normal forms are like 1NF, 2NF, 2NF
+
+Q. indexes help in speeding up retrieval by providing quick lookups
+
+ex select * from employee where empId = 5; so do indexing on empId;
+
+
+Q. wht are caching levels in hibernate ?
+
+1. first level
+Session session = sessionFactory.openSession();
+Employee emp1 = session.get(Employee.class, 1);
+
+here scope is per session, keep entity in memory in same hibernate session
+
+2. 2nd level
+Across multiple sessions, shared at the SessionFactory level.
+@Cacheable
+
+3. Query cache
+
+List<Employee> employees = session.createQuery("from Employee").setCacheable(true).list();
+
+
+abstract class A {
+    A() {
+        System.out.println("A");
+    }
+}
+
+class B extends A {
+    B() {
+        System.out.println("B");
+    }
+}
+
+output of
+
+A a1 = new A();  
+A a2 = new B();  
+B b1 = new A();  
+B b2 = new B(); 
+
+A a1 = new A();  B b1 = new A();  error, object of abstract class cant be created. 
+
+
+first parent class constructor will be called the of child class
+
+A
+B
+A
+B
+
+Q. int getNumber() {
+    try {
+        int x = 10 / 0;   // this will throw ArithmeticException
+        return 3;
+    }
+    catch(Throwable t) {
+        return 5;
+    }
+    finally {
+        return 7;
+    }
+}
+
+if exception occurs or not, answer will always be 7
+
+Q. output of below code
+
+class A{
+    
+    public void getName(){
+        System.out.println("A");
+    }
+    
+}
+
+class B extends A{
+    
+    public void getName(){
+        System.out.println("B");
+    }
+    
+}
+
+
+class Main {
+    public static void main(String[] args) {
+        
+        A a1 = new A();
+        A a2 = new B();
+        B b1 = new A();
+        B b2 = new B();
+        
+        a1.getName();  A
+        a2.getName();  B
+        b1.getName();  //error A cannot be converted to B
+        b2.getName();  B
+        
+    }
+}
+
+if getName() method is made as static in classA then program wont run as overridden method is static.. Need to make static in child class also
+
+
+Q. Constructor calling in java
+
+class Parent{
+	
+     Parent(String msg)
+    {
+	System.out.println("parent constructor " + msg);
+    }
+}
+
+class Child extends Parent{
+	
+     Child()
+     {
+	super("hello");
+        SOP("child constructor");
+     }
+}
+
+public class Test{
+  
+
+   psvm()
+   {
+	Child c = new Child();      parent constructor hello
+				    child constructor
+
+    }
+
+}
+
+Q> how to design API gateways -> using Spring cloud
+
+Q. find top 3 earning employees
+
+select distinct salary from Employee order by salary desc limit 3;
+
+Q. flatMap example in stream API
+
+List<List<String>> namesNested = Arrays.asList(
+                Arrays.asList("Rachit", "Mohit"),
+                Arrays.asList("Amit", "Sumit"),
+                Arrays.asList("Raj")
+        );
+
+        // Flatten list of lists into a single list
+        List<String> namesFlat = namesNested.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        System.out.println(namesFlat); 
+
+
+Q. challenges in MC architecture
+
+1.Service Discovery & Communication
+Managing how services find and talk to each other
+
+2. Data Management
+Each service may have its own database → handling distributed transactions, data consistency, and reporting is complex.
+
+3 Security
+Securing internal service-to-service communication (authentication, authorization
+
+4. monitoring - with small services, centralized logging tracing metrics collection using Prometheus, grfana is crucial.
+5. unit testing is easy but integration testing and E2E testing is difficult
+
+Q. how to ensure data consistency in microservices
+SAGA pattern - A Saga is a sequence of local transactions across services. If one transaction fails, compensating transactions are executed to roll back previous steps.
+
+Example:
+
+Order Service creates order → emits OrderCreated.
+
+Payment Service reserves money → emits PaymentSuccessful.
+
+Inventory Service reserves items → emits StockReserved.
+
+If step 3 fails → send PaymentRollback.
+
+Event-Driven Architecture (EDA) - Services communicate via events (Kafka, RabbitMQ). Ensures data consistency by event propagation.
+
+
+
+Q. how to secure comm in MC's
+
+use API gateway, JWT token to validate user services access
+data protection encrypt data using https
+
+
+Q. Idempotency in APIs.an operation which can be called multiple times with the same input and will always 
+produce the same result without additional side effects. 
+
+GET /users/1 → Safe and idempotent.
+
+PUT /users/1 (update user) → Idempotent.
+
+POST /users (create user) → Not idempotent. eveytime adds a new resource.
+
+
+Q. how to do Database performance tuning
+
+1. use indexing in columns in frequent queries but dont overuse index as it can take extra storage space.
+
+2. normalization - Organizing data in a relational database into multiple related tables to reduce redundancy and ensure data consistency.
+helps in avoiding duplication.
+
+3. Partitioning / Sharding for large datasets
+Splitting a single large table into smaller partitions based on a key (like date, region, or ID range) while still in the same database.
+
+Horizontal partitioning (row-based): e.g., Orders_2023, Orders_2024.
+
+Vertical partitioning (column-based): split wide tables into smaller ones by grouping columns.
+
+Sharding - Distributing data across multiple database servers. (different physical machines).
+
+Each shard is responsible for a subset of data (e.g., users A–M on Shard 1, users N–Z on Shard 2).
+
+
+Q. Scaling Microservices
+
+Horizontal scaling: Add more instances of service (stateless services + load balancer). Preferred.
+
+Vertical scaling: Add more CPU/RAM to one server. Limited scalability.
+
+
+Q. how to Handle huge number of requests
+
+Use Load Balancer (NGINX, AWS ALB).
+
+Horizontal scaling with stateless services.
+
+Use Message Queues (Kafka, RabbitMQ).
+
+Caching (Redis).
+
+Backpressure / Rate Limiting.
+
+Q. Debugging & Production Issues
+
+Use logs (structured logging → ELK stack, Splunk).
+
+Metrics / Monitoring (Prometheus + Grafana, Micrometer).
+
+Feature flags to disable problem features.
+
+Rollback deployment if needed.
+
+
+Q. Application performance optimization strategies
+
+Opening a new connection = expensive (handshake, authentication, network round trip)
+Reduce synchronous DB calls → use caching,
+Use DB connection pool
+Instead of creating a new connection every time, the application borrows a connection from the pool.
+
+When finished, it returns it to the pool instead of closing it. Next request can reuse the same connection.
+
+spring.datasource.url=jdbc:mysql://localhost:3306/mydb
+spring.datasource.username=root
+spring.datasource.password=secret
+
+# Connection pool settings
+spring.datasource.hikari.maximum-pool-size=20   # max connections
+spring.datasource.hikari.minimum-idle=5         # idle connections ready
+spring.datasource.hikari.idle-timeout=300000    # 5 mins before closing idle
+spring.datasource.hikari.max-lifetime=1800000   # 30 mins per connection
+
+
+Q. Spring Boot Starter Dependencies
+
+
+Q. Kafka vs RabbitMQ
+
+Kafka:
+
+Distributed event streaming platform.
+
+High throughput, persistent, replayable messages.
+
+Good for event-driven architectures, log aggregation.
+
+RabbitMQ:
+
+Traditional message broker.
+
+Complex routing (topics, fanout, direct).
+
+Good for task queues and request/response.
+
+Q. Monitoring logs in production Spring Boot apps
+
+Use Centralized Logging: ELK Stack (Elasticsearch, Logstash, Kibana), EFK (Fluentd), Splunk.
+
+Add structured JSON logging (logback-spring.xml).
+
+Use Spring Boot Actuator for health/metrics.
+
+Tools: Prometheus + Grafana for metrics, Zipkin/Jaeger for tracing.
+
+Q. What are Spring Boot Starter Dependencies?
+A Starter Dependency in Spring Boot is a predefined set of commonly used dependencies bundled together in a single POM dependency.
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+✅ That one line brings Spring MVC, Jackson (JSON), Tomcat, and other dependencies.
+Spring Boot automatically brings the right versions.
+
+
+
+
+Q. what is async
+In many apps, sending an email or generating a PDF report is time-consuming.
+If you make it synchronous, the user has to wait until the task finishes.
+With @Async, the request immediately returns a response, and the heavy task runs in the background.
+
+
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+@Service
+public class NotificationService {
+
+    @Async   // 🔥 executes in a separate thread (non-blocking)
+    public void sendEmail(String userEmail) {
+        try {
+            System.out.println("Sending email to " + userEmail +
+                    " in thread: " + Thread.currentThread().getName());
+            Thread.sleep(5000); // simulate delay
+            System.out.println("Email sent successfully to " + userEmail);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class NotificationController {
+
+    private final NotificationService notificationService;
+
+    public NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    @GetMapping("/notify")
+    public String notifyUser() {
+        notificationService.sendEmail("user@example.com"); // async call
+        return "Request received! Email will be sent in background.";
+    }
+}
+
+User calls http://localhost:8080/notify.
+console logs
+
+Sending email to user@example.com in thread: task-1
+Request received! Email will be sent in background.
+Email sent successfully to user@example.com
+
+
+Q. what are web client in asynchronous communucation in microservices
+
+RestTemplate is used for synchronous communication.WebClient is part of Spring WebFlux asynchroinous communication (introduced in Spring 5).
+
+It’s a non-blocking, reactive web client used to make HTTP calls between microservices.
+
+Unlike RestTemplate (which waits until the response arrives), WebClient returns immediately with a reactive type (Mono or Flux) and handles the response asynchronously.when one service depends on others, but you don’t want to block execution until they reply.
+
+@Service
+public class OrderService{
+
+    private final CustomerClient customerClient;
+
+    public OrderService(CustomerClient customerClient) {
+        this.customerClient = customerClient;
+    }
+
+    public Mono<String> placeOrder(String customerId)
+    {
+	 return customerClient.getCustomerById(customerId)
+                .map(customer -> "Order placed for: " + customer.getName());
+
+    }
+
+}
+
+
+@Service
+public class CustomerClient{
+
+     private final WebClient webClient;
+    
+    public CustomerClient(WebClient.Builder builder) {
+        this.webClient = builder.baseUrl("http://customer-service").build();
+    }
+
+    public Mono<Customer> getCustomerById(String id)
+   {
+	return webClient.get()
+               .uri("/customers/{id}", customerId)
+               .retrieve()
+               .bodyToMono(Customer.class)
+               .timeout(Duration.ofSeconds(3)) // if no response in 3s → error
+            .onErrorResume(e -> {
+                System.out.println("Error occurred: " + e.getMessage());
+                return Mono.empty(); // return empty instead of failing
+            });
+   }
+
+}
+
+Once the remote service replies, the data is pushed into the Mono, and downstream operators (map, flatMap, etc.) get executed.
+The Mono completes with an error signal (e.g., WebClientResponseException, TimeoutException).
+
+
+Q. Daemon threads
+They are low-priority threads that run in the background (e.g., garbage collection, monitoring tasks).Any thread can be marked as a daemon thread using:
+thread.setDaemon(true);
+
+
+
+Q. what is websocket, STOMP ?
+websocket is a 2 way messaging protocol both client and server can send msg to each other. full duplex, real time 
+STOMP - simple text oriented msg protocol. has a publish a subscribe model.
+server pushes data to a topic, client will subcribe to the topic and get the data from those topics

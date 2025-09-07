@@ -17,7 +17,7 @@ public class MoveZero {
             }
         }
 
-        while(j < count){
+        while(j < arr.length){
             newArr[j++] = 0;
         }
 
