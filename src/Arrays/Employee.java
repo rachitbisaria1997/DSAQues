@@ -67,6 +67,12 @@ class EmpStream{
                             .collect(Collectors.groupingBy(Employee::getDepartmentName, Collectors.collectingAndThen(Collectors.toList(),
                                     list -> list.stream().sorted(Comparator.comparingInt(Employee::getSalary).reversed()).skip(1).findFirst())));
 
+        Map<String, Optional<Employee>> secHighest = employeeList.stream()
+                            .collect(Collectors.groupingBy(Employee::getDepartmentName, Collectors.collectingAndThen(Collectors.toList(),
+                                    list -> list.stream().sorted(Comparator.comparingInt(Employee::getSalary).reversed()).skip(1).findFirst())));
+
+        System.out.println(secHighest);
+
         secondHighestByDept.forEach((dept, emp) -> System.out.println("department "+ dept + " -> 2nd highest : " + emp.get().getSalary()));
 
     }

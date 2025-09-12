@@ -48,7 +48,7 @@ public class NewFile {
 
                 Collectors.averagingDouble(Employee::getSalary)));
 
-        Employee secondEmp = emp.stream().sorted(Comparator.comparingInt(Employee::getSalary)).skip(1).findFirst().get();
+        Employee secondEmp = emp.stream().sorted(Comparator.comparingInt(Employee::getSalary).reversed()).skip(1).findFirst().get();
 
         System.out.println(secondEmp.getSalary());
 

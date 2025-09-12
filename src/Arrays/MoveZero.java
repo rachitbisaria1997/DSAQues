@@ -4,24 +4,19 @@ public class MoveZero {
 
     static void pushZerosToEnd(int [] arr){
 
-        int count = 0;
         int j = 0;
-        int newArr[] = new int[arr.length];
 
         for(int i=0; i < arr.length; i++){
             if(arr[i] != 0){
-                newArr[j++] = arr[i];
-            }
-            else{
-                count += 1;
+                arr[j++] = arr[i];
             }
         }
 
         while(j < arr.length){
-            newArr[j++] = 0;
+            arr[j++] = 0;
         }
 
-        for(int h : newArr){
+        for(int h : arr){
             System.out.print(h + " ");
         }
     }
