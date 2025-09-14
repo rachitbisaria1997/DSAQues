@@ -936,11 +936,17 @@ public class Department{
 
      @OneToMany(mappedBy="department", fetch = FetchType.LAZY)
      private List<Employee> employee;
+
+     public List<Employee> getEmployees()
+     {
+	 return employees;
+     }
 }
 
 
 Department dept = session.get(Department.class, 1L);
 List<Employee> list = dept.getEmployees();  now the query is fired
+Data loaded only when accessed
 
 // eager loading
 
@@ -952,6 +958,8 @@ public class Department {
 
 Department dept = session.get(Department.class, 1L);
 // all employees are loaded along with department
+//Data loaded immediately with parent entity.
+
 
 Helps in performance, avoids heavy joins.
 
@@ -2105,6 +2113,22 @@ Q. indexes help in speeding up retrieval by providing quick lookups
 ex select * from employee where empId = 5; so do indexing on empId;
 
 
+Q. ArrayList Ordering
+
+ArrayList maintains insertion order, NOT sorted order.
+
+If you want sorted data, you must use Collections.sort(list) or TreeSet/PriorityQueue.
+
+
+Q. JVM divides memory into three main runtime areas:
+
+Heap → Stores objects and their instance variables.
+
+Stack → Stores method call frames, local variables, references.
+
+Method Area (a.k.a. MetaSpace in Java 8+) → Stores class metadata, static variables, static methods, and constant pool.
+
+
 Q. wht are caching levels in hibernate ?
 
 1. first level
@@ -2373,7 +2397,6 @@ spring.datasource.hikari.idle-timeout=300000    # 5 mins before closing idle
 spring.datasource.hikari.max-lifetime=1800000   # 30 mins per connection
 
 
-Q. Spring Boot Starter Dependencies
 
 
 Q. Kafka vs RabbitMQ
@@ -2413,6 +2436,20 @@ A Starter Dependency in Spring Boot is a predefined set of commonly used depende
 </dependency>
 ✅ That one line brings Spring MVC, Jackson (JSON), Tomcat, and other dependencies.
 Spring Boot automatically brings the right versions.
+
+
+
+@EnableAutoConfiguration checks the dependencies and autoconfigures the usefulbeans into our application.
+for ex if above starter web is included in pom.xml, @EnableAutoConfiguration auto configures tomcat server, dispatcher servlet, datasource if driver is present.
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+if above dependency is present, @EnableAutoConfiguration automatically adds below dependencies in the application
+
+like spring data jpa, hibernate-core, spring-tx. It activates EntityManagerFactory, repositories interface like JPARepository, CrudRepository etc
 
 
 
@@ -2516,7 +2553,7 @@ public class CustomerClient{
             .onErrorResume(e -> {
                 System.out.println("Error occurred: " + e.getMessage());
                 return Mono.empty(); // return empty instead of failing
-            });
+.            });
    }
 
 }
@@ -2535,3 +2572,98 @@ Q. what is websocket, STOMP ?
 websocket is a 2 way messaging protocol both client and server can send msg to each other. full duplex, real time 
 STOMP - simple text oriented msg protocol. has a publish a subscribe model.
 server pushes data to a topic, client will subcribe to the topic and get the data from those topics
+
+
+Q. 
+Integer c = 200;
+Integer d = 200;
+System.out.println(c == d);
+
+Output will be false, because 200 is outside the cache range, so two different objects are created.
+The JVM maintains a cache of Integer objects in the range -128 to 127.
+
+Integer c = 20;
+Integer d = 20;
+System.out.println(c == d);
+outpt will be true, So both c and d point to the same cached object when the value is within that range.
+
+
+Q. String a = "hello";              // goes into String pool
+String b = "hel" + "lo";         // compile-time constant → "hello" from pool
+String c = "hel";                // from pool
+String d = c + "lo";             // runtime concatenation → new String object. This creates a new String object on the heap
+
+a == b, output is true. Both a and b point to the same "hello" in the String pool.
+
+a == d - false
+
+a.equals(d) -> true
+
+
+Q. find 2nd highest salary dept wise
+
+select e1.name, e1.department, max(e1.salary)
+	from Employee e1
+	where e1.salary < (select max(e2.salary) from Employee e2	
+	where e2.department = e1.department
+); 
+
+
+
+Q. what is AOP. A programming paradigm to separate cross-cutting concerns (like logging, security, transactions) from business logic.
+
+pointcut - A predicate (expression) that selects specific join points..it defines where advice should run
+join point - A point during execution of a program where an Aspect can be applied. ex - Method execution, Exception thrown
+
+public class PaymentService {
+    public void processPayment() {
+        System.out.println("Processing payment...");
+    }
+}
+
+@Aspect
+public class LoggingAspect{
+	
+  //// Pointcut: execution of any method in PaymentService class
+
+  @Pointcut("execution((* com.example.service.PaymentService.*(..))")
+  public void paymentServiceMethods() {}
+  
+  //  // Advice: runs before the join point
+  @Before("paymentServiceMethods()")
+  public void logBefore()
+  {
+     SOP("logging before the method execution");
+  }
+
+}
+
+Join Point - The actual method execution processPayment()
+Pointcut - execution(* com.example.service.PaymentService.*(..)) (selects all methods in PaymentService).
+advice - action you want to run logging. logBefore
+
+
+Q. what are spring dev tools
+Spring Boot DevTools is a set of tools that improve the developer experience during development by providing features that make coding, testing, and debugging faster and easier.
+
+
+1️⃣ Automatic Restart:
+
+Automatically restarts the application whenever files on the classpath change (e.g., code or resources).
+
+Speeds up development because you don’t need to manually restart the app.
+
+2️⃣ LiveReload Support:
+
+Automatically refreshes the browser when resources (like HTML, CSS, JS) change.
+
+Useful when working on web applications.
+
+
+Add dependency in pom.xml
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <optional>true</optional>
+</dependency>

@@ -198,7 +198,7 @@ public class Student {
         System.out.println("---------");
 
             // Sort Students by Rank
-            List<Student> studRank = studlist.stream().sorted(Comparator.comparingInt(stud -> stud.getRank()))
+            List<Student> studRank = studlist.stream().sorted(Comparator.comparingInt(Student::getRank))
                     .collect(Collectors.toList());
 
         for(Student st : studRank){
