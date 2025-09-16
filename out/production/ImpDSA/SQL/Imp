@@ -169,4 +169,80 @@ from employees
 group by dept_id;
 
 
+Q. find 2nd highest salary department wise
+
+select e1.name, e1.department, max(e1.salary)
+from Employee e1
+where e1.salary < (select max(e2.salary) from Employee e2
+where e1.department = e2.department
+) group by e1.department;
+
+Q. how to prevent SQL injection ?
+
+Use PreparedStatement instead of Statement.
+
+String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+PreparedStatement pstmt = connection.prepareStatement(query);
+pstmt.setString(1, username);
+pstmt.setString(2, password);
+ResultSet rs = pstmt.executeQuery();
+
+
+Q. Different types of index in SQL
+
+1. Unique index - Ensures that values in the indexed column(s) are unique
+create table users(
+  id int auto_increment primary key,
+  username varchar(20),
+  email varchar(20),
+  unique(email);
+);
+
+INSERT INTO Users (username, email) VALUES ('Alice', 'alice@example.com');
+INSERT INTO Users (username, email) VALUES ('Bob', 'alice@example.com');  -- ❌ Error: Duplicate key
+
+2. Clustered index - data rows are stored in the order of clustered_index. table can have only 1 clustered index.
+
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,  -- Automatically becomes a Clustered Index
+    order_date DATE,
+    customer_id INT
+);
+
+Data rows in the table are stored in the order of order_id.
+
+3. non clustered index
+
+CREATE TABLE Products (
+    product_id INT PRIMARY KEY,  -- Clustered Index
+    name VARCHAR(100),
+    category VARCHAR(50),
+    price DECIMAL(10,2)
+);
+
+create index idx_category ON Products(category);
+
+data itself is not sorted by category index as its non clustered
+
+Q. how to do transactions in SQL
+A Transaction is a sequence of one or more SQL operations (queries) that are treated as a single unit of work.
+Once a transaction is committed, changes are permanent even if system crashes
+
+if any error occurs, than rollback the changes
+
+Begin transaction
+
+insert into UserAccount(user_id, email) values(1, 'user@example,com');
+
+update Account SET balance = balance - 100 where user_id = 1;
+
+COMMIT;
+
+EXCEPTION
+ when others then
+ Rollback;
+
+End;
+
+
 

@@ -1,17 +1,18 @@
 package Arrays;
 
+import java.util.Arrays;
+
 public class RemoveElement {
 
     public static void main(String[] args) {
 
         int [] nums = {1,3,3,3,4,3};
 
-        int result = removeElement(nums, 3);
-        System.out.println(result);
+        removeElement(nums, 3);
 
     }
 
-    public static int removeElement(int [] nums, int val){
+    public static void removeElement(int [] nums, int val){
         int len = 0;
         for(int i : nums){
             if(i != val){
@@ -19,6 +20,16 @@ public class RemoveElement {
             }
         }
 
-        return len;
+        int[] result = new int[len];
+        int index = 0;
+
+        for(int num : nums){
+            if(num != val){
+                result[index++] = num;
+            }
+        }
+
+        System.out.println(Arrays.toString(result));
+
     }
 }

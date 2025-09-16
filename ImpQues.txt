@@ -2627,7 +2627,9 @@ public class LoggingAspect{
   //// Pointcut: execution of any method in PaymentService class
 
   @Pointcut("execution((* com.example.service.PaymentService.*(..))")
-  public void paymentServiceMethods() {}
+  public void paymentServiceMethods() {
+    SOP("logging before the method execution as per Pointcut");
+  }
   
   //  // Advice: runs before the join point
   @Before("paymentServiceMethods()")
