@@ -29,13 +29,28 @@ public class ReverseLL {
         return prev;
     }
 
+    public void printList(NodeNew head){
+
+        NodeNew temp = head;
+        while(temp != null){
+            System.out.println(temp.data + "  ");
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+
     public static void main(String[] args) {
 
-        Node head = new Node(1);
-        head.next = new Node(2);
-        head.next.next = new Node(3);
-        head.next.next.next = new Node(4);
-        head.next.next.next.next = new Node(5);
+        NodeNew head = new NodeNew(1);
+        head.next = new NodeNew(2);
+        head.next.next = new NodeNew(3);
+        head.next.next.next = new NodeNew(4);
+        head.next.next.next.next = new NodeNew(5);
+
+        ReverseLL obj = new ReverseLL();
+
+        NodeNew newHead = obj.reverseList(head);
+        obj.printList(newHead);
 
     }
 }

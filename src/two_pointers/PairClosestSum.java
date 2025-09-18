@@ -12,7 +12,7 @@ public class PairClosestSum {
         Arrays.sort(arr);
         int left = 0;
         int right = n-1;
-        int min_diff = Integer.MIN_VALUE;
+        int min_diff = Integer.MAX_VALUE;
         List<Integer> res = new ArrayList<>();
 
         while(left < right){
