@@ -9,15 +9,16 @@ public class FIndPeakElem {
 //
     static int peakElement(int [] arr){
         int n = arr.length;
+        int ans = -1;
 
         for(int i=1; i < n - 1; i++){
 
             if(arr[i-1] < arr[i] && arr[i] > arr[i+1]){
-                return i;
+                ans = i;
             }
         }
 
-        return -1;
+        return ans;
     }
 
     public static void main(String[] args) {

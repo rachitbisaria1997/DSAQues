@@ -244,5 +244,26 @@ EXCEPTION
 
 End;
 
+Q. Find employees who were NOT present on a given date
+
+Employee (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(100),
+    supervisor_id INT
+)
+
+Attendance (
+    id INT PRIMARY KEY,
+    emp_id INT,
+    attendance_date DATE,
+    present CHAR(1) -- 'Y' or 'N'
+)
 
 
+select e.emp_id, e.emp_name, e.emp_id  as supervisor_id, s.emp_name as supervisor_name
+from Employee e
+left join Employee s
+on e.supervisor_id = s.emp_id
+left join Attendance a
+on e.emp_id = a.emp_id and a.attendance_date = '2025-09-21'
+where a.present is Null or a.present = 'N';

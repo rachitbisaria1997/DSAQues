@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NewFile {
+public class  NewFile {
 
     public static void main(String[] args) {
 

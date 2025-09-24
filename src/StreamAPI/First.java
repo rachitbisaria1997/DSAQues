@@ -138,6 +138,13 @@ public class First {
 
         System.out.println(uniqueWords);
 
+        List<Integer> numbs = Arrays.asList(1, 2, 3, 2, 4, 5, 1, 6, 3);
+
+        Set<Integer> duplicates = numbs.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                                    .entrySet().stream().filter(e -> e.getValue() > 1).map(e -> e.getKey()).collect(Collectors.toSet());
+
+        System.out.println(duplicates);
+
 
     }
 
