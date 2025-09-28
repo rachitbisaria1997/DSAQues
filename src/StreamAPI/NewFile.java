@@ -2,6 +2,7 @@ package StreamAPI;
 
 import java.util.ArrayList;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class  NewFile {
@@ -29,7 +30,6 @@ public class  NewFile {
         }
 
         Map<String, List<Employee>> deptMap = emp.stream().collect(Collectors.groupingBy(Employee::getDepartmentName, Collectors.toList()));
-
 
         System.out.println("dept Map is" + deptMap);
 

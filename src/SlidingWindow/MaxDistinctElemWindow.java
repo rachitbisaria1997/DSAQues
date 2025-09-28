@@ -2,9 +2,9 @@ package SlidingWindow;
 
 import java.util.*;
 
-public class CountDistinct {
+public class MaxDistinctElemWindow {
 
-    static List<Integer> countDistinct(int[] arr, int k) {
+    static int maxSum(int[] arr, int k){
 
         List<Integer> al = new ArrayList<>();
 
@@ -26,15 +26,14 @@ public class CountDistinct {
                 }
             }
         }
-        return al;
-
+        //find the max distinct elements in any window
+        return al.stream().max(Integer::compare).get();
     }
 
     public static void main(String[] args) {
-        int[] arr = {1, 2, 1, 3, 4, 2, 3};
+        int arr[] = { 1, 4, 2, 10, 2, 3, 1, 0, 20 };
         int k = 4;
-        System.out.println(countDistinct(arr, k)); // [3, 4, 4, 3]
+        int ans = maxSum(arr, k);
+        System.out.print(ans);
     }
-
-
 }
