@@ -4,32 +4,18 @@ public class SortArr {
 
     static void sortArr(int [] arr){
 
-        int n = arr.length;
-        int i = 0;
-        int rCount = 0;
-        int k = 0;
+        int j = 0;
 
-        int [] newArr = new int[n];
-
-        for(int j=0; j < n; j++){
-
-            if(arr[j] == 0){
-                newArr[i++] = 0;
-            }
-
-            else{
-                rCount += 1;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != 0) {
+                arr[j++] = arr[i]; // <-- FIX: use arr[i], not 1
             }
         }
 
-        while(k < rCount){
-            newArr[i++] = 1;
-            k++;
+        while (j < arr.length) {
+            arr[j++] = 0;
         }
 
-        for(int g = 0; g < n; g++){
-            arr[g] = newArr[g];
-        }
     }
 
     public static void main(String[] args) {

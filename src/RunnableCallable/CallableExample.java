@@ -4,7 +4,7 @@ import java.util.concurrent.*;
 
 public class CallableExample {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         Callable<Integer> task = () -> {
 

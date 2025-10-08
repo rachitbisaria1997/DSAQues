@@ -51,6 +51,7 @@ public class CountPairs {
     public static void main(String[] args){
 
         int[] arr = {1, 4, 1, 4, 5};
+        // 1 1 4 4 5
         //[{1,4}, {1,4}, {4,1}, {1,4410}]
         int k = 3;
         System.out.print(countPairs(arr, k));

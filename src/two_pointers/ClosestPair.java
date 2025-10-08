@@ -9,10 +9,9 @@ public class ClosestPair {
     public static void findClodPair(int [] arr1,int [] arr2,  int target){
 
         int diff = Integer.MAX_VALUE;
-        int n = arr2.length-1;
         int res_l = 0, res_r = 0;
 
-        int l =0, r = n;
+        int l =0, r = arr2.length - 1;
 
         while(l < arr1.length && r >= 0)
         {

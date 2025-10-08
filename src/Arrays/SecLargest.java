@@ -2,7 +2,7 @@ package Arrays;
 
 public class SecLargest {
 
-    static int getSecondLargest(int [] arr){
+    static void getSecondLargest(int [] arr){
 
         int first = Integer.MIN_VALUE;
         int second = Integer.MIN_VALUE;
@@ -10,25 +10,27 @@ public class SecLargest {
 
         for(int i=0; i < arr.length; i++){
 
-            if(arr[i] > first){
-                first = arr[i];
+            int num = arr[i];
+            if(num > first){
+                third = second;
+                second = first;
+                first = num;
             }
-            else if(arr[i] > second && second != first){
-                second = arr[i];
+            else if(num > second){
+                third = second;
+                second = num;
             }
-            else if(arr[i] > third && third != second && third != first){
-                third = arr[i];
+            else if(num > third && num < second){
+                third = num;
             }
 
         }
-        System.out.println("third largest element is "+ third);
-        return second;
+        System.out.println("third largest element is "+ third + " second largest is "+ second);
     }
 
     public static void main(String[] args) {
         int [] arr =  {12, 35, 1, 10, 34, 13};
-        int ans = getSecondLargest(arr);
-        System.out.println(ans);
+        getSecondLargest(arr);
     }
 
 }
