@@ -1,54 +1,74 @@
 package LinkedList;
 
-class   LNode{
-
-    int data;
-    LNode next;
-
-    LNode(int data){
-        this.data = data;
-        this.next = null;
-    }
-}
-
 public class DeleteNode {
 
-    LNode head;
 
-    void deleteBegin()
+    static Node deleteBegin(Node head)
     {
         if(head == null){
-            head = head.next;
+            System.out.println("list is empty");
+            return null;
+        }
+        return head.next;
+    }
+
+    static void printNode(Node head){
+        Node temp = head;
+        while(temp != null){
+            System.out.println(temp.data);
+            temp = temp.next;
         }
     }
 
-    void deleteFromEnd(){
-
-       // Node temp = head;
-//        while(temp.next.next != null){
-//            temp = temp.next;
-//        }
-//
-//        temp.next = null;
+    static Node deleteFromEnd(Node head){
+        Node temp = head;
+        while(temp.next.next != null){
+            temp = temp.next;
+        }
+        temp.next = null;
+        return head;
     }
 
-    void deleteByValue(int value){
+    static Node deleteByValue(Node head, int value){
 
         if(head == null){
-            return;
+            return null;
         }
 
-  //      Node temp = head;
         if(head.data == value){
             head = head.next;
-            return;
         }
 
-//        while(temp.next != null && temp.next.data != value){
-//            temp = temp.next;
-//        }
-//
-//        temp.next = temp.next.next;
+        Node temp = head;
+        while (temp.next.data  != value){
+            temp = temp.next;
+        }
+
+        temp.next = temp.next.next;
+
+        return head;
     }
 
+
+    public static void main(String[] args) {
+
+        Node head = new Node(10);
+        head.next = new Node(20);
+        head.next.next = new Node(30);
+        head.next.next.next = new Node(40);
+        head.next.next.next.next = new Node(50);
+        head.next.next.next.next.next = new Node(60);
+        head.next.next.next.next.next.next = new Node(70);
+
+        head = deleteBegin(head);
+
+        printNode(head);
+
+        System.out.println("------");
+
+        head = deleteFromEnd(head);
+
+        printNode(head);
+
+    }
 }

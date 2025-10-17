@@ -171,11 +171,20 @@ group by dept_id;
 
 Q. find 2nd highest salary department wise
 
-select e1.name, e1.department, max(e1.salary)
-from Employee e1
-where e1.salary < (select max(e2.salary) from Employee e2
-where e1.department = e2.department
-) group by e1.department;
+SELECT
+    e1.department,
+    MAX(e1.salary) AS second_highest_salary
+FROM
+    Employee e1
+WHERE
+    e1.salary < (
+        SELECT MAX(e2.salary)
+        FROM Employee e2
+        WHERE e1.department = e2.department
+    )
+GROUP BY
+    e1.department;
+
 
 Q. how to prevent SQL injection ?
 

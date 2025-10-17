@@ -22,8 +22,7 @@ public class LongestCommonPrefix {
 
         String first = arr[0];
         String last = arr[arr.length - 1];
-        String res = "";
-        int i = 0;
+         int i = 0;
 
         while(i < first.length() && i < last.length() && first.charAt(i) == last.charAt(i)){
             i++;

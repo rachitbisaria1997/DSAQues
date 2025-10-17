@@ -1,15 +1,6 @@
 package LinkedList;
 
-//class Node {
-//
-//    int data;
-//    Node next;
-//
-//    Node(int x) {
-//        this.data = x;
-//        this.next = null;
-//    }
-//}
+import java.util.HashSet;
 
 public class DetectLoop {
 
@@ -25,6 +16,19 @@ public class DetectLoop {
             }
         }
 
+        return false;
+    }
+
+    static boolean detLoop(Node head){
+        HashSet<Node> visited = new HashSet<>();
+
+        while (head != null){
+            if(visited.contains(head)){
+                return true;
+            }
+            visited.add(head);
+            head = head.next;
+        }
         return false;
     }
 

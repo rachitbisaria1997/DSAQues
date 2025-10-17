@@ -1,7 +1,7 @@
 package Arrays;
 
 public class SubArrProd {
-
+    // count no of subarrays whose product is equal to k
     static int countSubArray(int arr[], int n, int k){
 
         int count = 0;
