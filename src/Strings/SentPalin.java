@@ -2,7 +2,7 @@ package Strings;
 
 public class SentPalin {
 
-    static boolean  isPalinSent(String s){
+        static boolean isPalinSent(String s){
         StringBuilder s1 = new StringBuilder();
         StringBuilder rev = new StringBuilder();
 

@@ -52,6 +52,20 @@ public class  NewFile {
 
         System.out.println(secondEmp.getSalary());
 
+
+        Employee thirdEmp = emp.stream().sorted(Comparator.comparingInt(Employee::getSalary).reversed()).skip(2).findFirst().get();
+
+        System.out.println(thirdEmp.getSalary());
+
+        Optional<Integer> thirdHigh = emp.stream().map(Employee::getSalary).distinct().sorted(Comparator.reverseOrder()).skip(2).findFirst();
+
+        if(thirdHigh.isPresent()){
+            System.out.println("3rd highest salary is "+ thirdHigh.get());
+        }
+        else{
+            System.out.println("not enough employees");
+        }
+
     }
 
 }

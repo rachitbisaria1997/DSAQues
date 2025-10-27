@@ -145,7 +145,13 @@ public class First {
 
         System.out.println(duplicates);
 
+        String[] cities = {"Agra", "Noida", "Agra", "Delhi", "Agra"};
 
+        String mostOccurCity = Arrays.stream(cities).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                            .entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse("no city found");
+
+
+        System.out.println("most occuring city is "+ mostOccurCity);
     }
 
     public boolean isPrime(int num){
