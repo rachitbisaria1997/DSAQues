@@ -1,8 +1,6 @@
 package Strings;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class NonRepeating {
 
@@ -46,7 +44,7 @@ public class NonRepeating {
                  return i;
              }
          }
-
+        //ccurrence
         return -1;
      }
 

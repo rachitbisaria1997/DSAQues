@@ -276,3 +276,32 @@ on e.supervisor_id = s.emp_id
 left join Attendance a
 on e.emp_id = a.emp_id and a.attendance_date = '2025-09-21'
 where a.present is Null or a.present = 'N';
+
+creating index in SQL tables :-
+
+An index works like a book index. It helps DB find rows faster without scanning entire tables.
+
+creating index :-
+
+1. Single Column Index
+CREATE INDEX idx_emp_department ON employees(department);
+
+2. Composite index
+CREATE INDEX idx_emp_dept_salary ON employees(department, salary);
+
+3. Unique index
+create unique index idx_unique on users(email);
+
+4. priarmy index
+alter table users add primary key(id);
+
+How to Optimize SQL Queries
+1. select only required columns instead of select all the data
+
+2. use indexing
+
+3. avoid functions on indexed columns
+SELECT * FROM orders WHERE DATE(order_time) = '2025-01-01';
+
+4. limit large resuls set
+SELECT * FROM logs ORDER BY created_at DESC LIMIT 50;
