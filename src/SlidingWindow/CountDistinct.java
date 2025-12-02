@@ -7,13 +7,15 @@ public class CountDistinct {
     static List<Integer> countDistinct(int[] arr, int k) {
 
         List<Integer> al = new ArrayList<>();
+        Set<Integer> set = new HashSet<>();
 
         for(int i=0; i < arr.length; i++){
 
             int length = 0;
-            Set<Integer> set = new HashSet<>();
+            set.clear();
+
             for(int j = i; j < arr.length; j++){
-                set.clear();
+
                 length++;
                 if(length == k){
 

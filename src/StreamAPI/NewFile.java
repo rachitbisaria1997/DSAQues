@@ -9,19 +9,13 @@ public class  NewFile {
 
     public static void main(String[] args) {
 
-        List<Employee> emp = new ArrayList<>();
-
-        Employee e1 = new Employee();
-        e1.setName("Anjali");
-
-        Employee e2 = new Employee();
-        e2.setName("Chetan");
-
-        Employee e3 = new Employee();
-        e3.setName("Kirti");
-
-        Employee e4 = new Employee();
-        e4.setName("Jithin");
+        List<Employee> emp = Arrays.asList(
+                new Employee("Rohit", "IT", 28, "Mumbai", 50000),
+                new Employee("Sneha", "HR", 32, "Delhi", 45000),
+                new Employee("Arjun", "Finance", 30, "Bangalore", 60000),
+                new Employee("Meera", "IT", 25, "Pune", 48000),
+                new Employee("Vikram", "Marketing", 35, "Hyderabad", 55000)
+        );
 
         List<Employee> aEmp = emp.stream().filter(e -> e.getName().startsWith("A")).collect(Collectors.toList());
 
@@ -30,6 +24,8 @@ public class  NewFile {
         }
 
         Map<String, List<Employee>> deptMap = emp.stream().collect(Collectors.groupingBy(Employee::getDepartmentName, Collectors.toList()));
+
+
 
         System.out.println("dept Map is" + deptMap);
 
@@ -48,7 +44,14 @@ public class  NewFile {
 
                 Collectors.averagingDouble(Employee::getSalary)));
 
+        Map<String, List<String>> deptWiseNames = emp.stream().collect(Collectors.groupingBy(
+                                Employee::getDepartmentName, Collectors.mapping(Employee::getName, Collectors.toList())));
+
         Employee secondEmp = emp.stream().sorted(Comparator.comparingInt(Employee::getSalary).reversed()).skip(1).findFirst().get();
+
+        Map<String, Integer> deptSumSalary = emp.stream().collect(Collectors.groupingBy(Employee::getDepartmentName, Collectors.summingInt(Employee::getSalary)));
+
+        System.out.println(deptSumSalary);
 
         System.out.println(secondEmp.getSalary());
 
@@ -122,6 +125,12 @@ class Employee{
         this.salary = salary;
     }
 
-
+    public Employee(String name, String departmentName, int age, String city, int salary) {
+        this.name = name;
+        this.departmentName = departmentName;
+        this.age = age;
+        this.city = city;
+        this.salary = salary;
+    }
 
 }

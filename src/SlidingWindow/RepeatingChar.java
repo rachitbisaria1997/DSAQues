@@ -1,34 +1,38 @@
 package SlidingWindow;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 public class RepeatingChar {
     // Longest Substring Without Repeating Characters
 
     static int longestUniqueSubstr(String str){
-        int n = str.length();
-        int res = Integer.MIN_VALUE;
 
-        for(int i=0; i < n; i++){
-            HashSet<Character> set = new HashSet<>();
-            for(int j=i; j < n; j++){
-                String sub = str.substring(i, j);
+        int maxLength = Integer.MIN_VALUE;
+        String longest = "";
+        HashSet<Character> set = new HashSet<>();
 
-                for(char ch : sub.toCharArray()){
+        for(int i=0; i < str.length(); i++){
 
-                    if(!set.contains(ch)){
-                        set.add(ch);
-                    }
+            set.clear();
+            for(int j=i; j < str.length(); j++){
+
+                char ch = str.charAt(j);
+                if(set.contains(ch)){
+                    break;
                 }
+                set.add(ch);
 
-                res = Math.max(res, set.size());
+                if(set.size() > maxLength){
+                    maxLength = set.size();
+                    longest = str.substring(i, j + 1);
+                }
             }
         }
-
-        return res;
+        System.out.println(longest);
+        return maxLength;
     }
+
+
     
     public static void main(String[] args){
         String s = "geeksforgeeks";

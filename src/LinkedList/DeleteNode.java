@@ -29,6 +29,32 @@ public class DeleteNode {
         return head;
     }
 
+    static Node deleteMiddle(Node head){
+
+        if(head == null || head.next == null){
+            return null;
+        }
+
+        Node temp = head;
+        int len = getLength(head);
+        int mid = len / 2;
+
+        for(int i=0; i < mid - 1; i++){
+            temp = temp.next;
+        }
+        temp.next = temp.next.next;
+        return head;
+    }
+
+    static int getLength(Node head){
+        int length = 0;
+        while (head != null){
+            length += 1;
+            head = head.next;
+        }
+        return length;
+    }
+
     static Node deleteByValue(Node head, int value){
 
         if(head == null){
@@ -60,13 +86,15 @@ public class DeleteNode {
         head.next.next.next.next.next = new Node(60);
         head.next.next.next.next.next.next = new Node(70);
 
-        head = deleteBegin(head);
+//        head = deleteBegin(head);
+//
+//        printNode(head);
+//
+//        System.out.println("------");
+//
+//        head = deleteFromEnd(head);
 
-        printNode(head);
-
-        System.out.println("------");
-
-        head = deleteFromEnd(head);
+        head = deleteMiddle(head);
 
         printNode(head);
 

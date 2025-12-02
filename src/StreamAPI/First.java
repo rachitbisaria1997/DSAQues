@@ -44,6 +44,9 @@ public class First {
         }
 
         int total = numbers.stream().reduce(0, Integer::sum);
+
+        int summ = numbers.stream().mapToInt(Integer::intValue).sum();
+
         System.out.print(total);
 
         Optional<Integer> anyELement = numbers.stream().findAny();
@@ -108,14 +111,14 @@ public class First {
         }
 
         List<Integer> arr = Arrays.asList(1,2,3,1,2);
-        Optional<Integer> firstNonRep = arr.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                                                            .entrySet().stream().filter(e -> e.getValue() == 1).map(e -> e.getKey()).findFirst();
+        Optional<Integer> firstNonRep = arr.stream().collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
+                                                            .entrySet().stream().filter(e -> e.getValue() == 1).map(Map.Entry::getKey).findFirst();
 
         if(firstNonRep.isPresent()){
             System.out.println(firstNonRep);
         }
 
-        Optional<Integer> firstRep = arr.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+        Optional<Integer> firstRep = arr.stream().collect(Collectors.groupingBy(Function.identity(),LinkedHashMap::new, Collectors.counting()))
                 .entrySet().stream().filter(e -> e.getValue() > 1).map(e -> e.getKey()).findFirst();
 
         if(firstRep.isPresent()){
@@ -152,6 +155,18 @@ public class First {
 
 
         System.out.println("most occuring city is "+ mostOccurCity);
+
+        int [] arr1 = {1,2,5,1};
+        int [] arr2 = {3,1,5,5,2};
+
+        int [] newArr = Stream.concat(Arrays.stream(arr1).boxed(), Arrays.stream(arr2).boxed()).mapToInt(Integer::intValue).toArray();
+
+        int [] newArrSorted = Stream.concat(Arrays.stream(arr1).boxed(), Arrays.stream(arr2).boxed()).mapToInt(Integer::intValue).sorted().peek(e -> System.out.print(e + "  ")).toArray();
+
+
+        for(int i : newArr){
+            System.out.println(i);
+        }
     }
 
     public boolean isPrime(int num){

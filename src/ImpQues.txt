@@ -933,32 +933,78 @@ Q. lazy loading in hibernate
 
 @Entity
 public class Department{
+    
+    @OneToMany(mappedBy = "department",fetch = FetchType.LAZY)
+    private List<Employee> employees;
 
-     @OneToMany(mappedBy="department", fetch = FetchType.LAZY)
-     private List<Employee> employee;
+   public List<Employee> getEmployees()
+   {
+	return employees;
+   }
 
-     public List<Employee> getEmployees()
-     {
-	 return employees;
-     }
 }
 
 
-Department dept = session.get(Department.class, 1L);
-List<Employee> list = dept.getEmployees();  now the query is fired
-Data loaded only when accessed
+Session session = sessionFactory.openSession();
 
-// eager loading
+session.beginTransaction();
+
+
+Department dept = session.get(Department.class, 1L);
+
+// At this point, only the department data is fetched.
+// No query is executed to load employees yet.
+
+List<Employee> list = dept.getEmployees();
+
+//// Now, when we access getEmployees(), 
+// Hibernate executes a separate SQL query to fetch the employees.
+
+
+for(Employee emp : list)
+{
+	SOP(emp.getName());
+}
+
+session.getTransaction().commit();
+session.close();
 
 @Entity
 public class Department {
+
     @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
     private List<Employee> employees;
 }
 
+Session session = sessionFactory.openSession();
+session.beginTransaction();
+
+
 Department dept = session.get(Department.class, 1L);
-// all employees are loaded along with department
-//Data loaded immediately with parent entity.
+// At this point, Hibernate executes the following:
+// SELECT * FROM Department WHERE id = 1
+// AND immediately also:
+// SELECT * FROM Employee WHERE department_id = 1
+
+// All data (department + employees) is fetched eagerly upfront.
+
+List<Employee> list = dept.getEmployees();
+for (Employee emp : list) {
+    System.out.println(emp.getName());
+}
+
+session.getTransaction().commit();
+session.close();
+
+LazyInitializationException
+
+We try to access a lazy-loaded collection/entity outside of a Hibernate session.
+
+Session session = sessionFactory.openSession();
+Employee emp = session.get(Employee.class, id);
+session.close();
+emp.getDepartment().getName();  //
+
 
 
 Helps in performance, avoids heavy joins.
@@ -1140,9 +1186,6 @@ Return in try block – will finally execute?
 
 Yes, finally always executes even if try returns.
 
-java
-Copy
-Edit
 try {
     return 1;
 } finally {
@@ -1179,28 +1222,47 @@ class ReportGenerator { void generateReport() {} }
 class ReportSaver { void saveToPDF() {} }
 class EmailSender { void sendEmail() {} }
 
-2. pen/Closed Principle (OCP)
-You should be able to extend functionality without modifying existing code.
- O- class should be open for extensions and closed for modification
+2. Open/Closed Principle (OCP)
+we should add behaviour to a class without changing existing code. once a class is tested and working, you shouldn't need to modify its source code 
+because that risk introduces new bugs.
 
-// ❌ Violates OCP
-class Payment {
-    void pay(String type) {
-        if (type.equals("credit")) { /*...*/ }
-        else if (type.equals("paypal")) { /*...*/ }
+
+class NotificationService {
+    public void sendNotification(String type, String message) {
+        if (type.equals("EMAIL")) {
+            System.out.println("Sending EMAIL: " + message);
+        } else if (type.equals("SMS")) {
+            System.out.println("Sending SMS: " + message);
+        }
     }
 }
 
-// ✅ OCP via polymorphism
-interface PaymentMethod { void pay(); }
 
-class CreditCard implements PaymentMethod {
-    public void pay() { /*...*/ }
+if you want to another notification like push notification that it violates OCP principle.
+interface Notification {
+   void send(String message);
 }
 
-class PayPal implements PaymentMethod {
-    public void pay() { /*...*/ }
+class EmailNotification implements Notification {
+    public void send(String message) {
+        System.out.println("Sending EMAIL: " + message);
+    }
 }
+
+class SMSNotification implements Notification {
+    public void send(String message) {
+        System.out.println("Sending SMS: " + message);
+    }
+}
+
+Now, if you want to add PushNotification, you just create a new class:
+
+class PushNotification implements Notification {
+    public void send(String message) {
+        System.out.println("Sending PUSH: " + message);
+    }
+}
+
 
 3. Subclasses should behave like their parents.
 
@@ -1727,13 +1789,13 @@ public class SecondHighestSalary {
     public static void main(String[] args) {
         List<Integer> salaries = Arrays.asList(5000, 7000, 6000, 7000, 8000, 8000, 9000);
 
-        Optional<Integer> secondHighest = salaries.stream()
+        int secondHighest = salaries.stream()
             .distinct() // remove duplicates
             .sorted(Comparator.reverseOrder()) // sort descending
             .skip(1) // skip highest
-            .findFirst(); // get second highest
+            .findFirst().get(); // get second highest
 
-        secondHighest.ifPresent(sal -> System.out.println("Second highest salary: " + sal));
+        System.out.println("Second highest salary: " + sal);
     }
 }
 
@@ -2627,9 +2689,7 @@ public class LoggingAspect{
   //// Pointcut: execution of any method in PaymentService class
 
   @Pointcut("execution((* com.example.service.PaymentService.*(..))")
-  public void paymentServiceMethods() {
-    SOP("logging before the method execution as per Pointcut");
-  }
+  public void paymentServiceMethods() {}
   
   //  // Advice: runs before the join point
   @Before("paymentServiceMethods()")
@@ -2669,3 +2729,610 @@ Add dependency in pom.xml
     <artifactId>spring-boot-devtools</artifactId>
     <optional>true</optional>
 </dependency>
+
+
+Q. What is DispatcherServlet in Spring MVC?
+DispatcherServlet is the front controller in Spring MVC.
+
+It handles all HTTP requests, delegates them to appropriate controllers, and manages the entire request-response lifecycle.
+
+✅ Typical flow:
+
+Request → DispatcherServlet.
+
+DispatcherServlet finds the appropriate Controller.
+
+Controller processes the request and returns a ModelAndView.
+
+DispatcherServlet resolves view and returns response.
+
+
+@RestController
+public class UserController{
+
+	
+  @GetMapping("/users")
+  public List<String> getUsers()
+  {
+     return List.of("jana", "kamal");
+  }
+}
+
+when /users is accessed, dispatcher servlet intercepts the request
+delagates it to getUsers() method in UserController and returns the list of users in JSON
+
+
+Q. what is service oriented architecture, diff between SOA and microservices.
+
+SOA is an architectural style where applications are composed of loosely coupled services that communicate over a network. 1 service can perform multiple functionalities.
+
+communication is via SOAP, often share DB.
+
+services are deployed together on the same servers, harder to scale independently.
+
+Microservices - fine grained, focus on 1 functionality.
+communicated via REST, HTTP.
+
+each MS has its own DB, independent deployable service. easier to scale individual microservice
+
+Q. how to prevent SQL injection ?
+
+Use PreparedStatement instead of Statement.
+
+String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+PreparedStatement pstmt = connection.prepareStatement(query);
+pstmt.setString(1, username);
+pstmt.setString(2, password);
+ResultSet rs = pstmt.executeQuery();
+
+Q. Does Not Overriding hashCode() Impact Performance?
+
+If you override equals() but not hashCode(), different objects that are logically equal may not hash to the same bucket → leads to poor performance in retrieval.
+
+
+Q. there is a server having large amount of data. its taking lots of time to respond, how to resolve this issue wrt java, issue is with server side
+
+1. Instead of returning the entire dataset in one response, return data in small chunks (pages).
+
+Pageable pageable = Pagerequest.of(pageNumber, pageSize);
+Page<Employee> page = pageRepo.findAll(pageable);
+
+List<Employee> employees = page.getContent();
+
+Reduces memory load.
+
+Improves response time.
+
+Supports lazy loading of data.
+
+or use Stream API's. If data needs to be processed sequentially without loading all into memory:
+
+
+2. Optimize DB queries.
+
+Avoid SELECT *; select only necessary columns.
+
+Add indexes on frequently filtered columns.
+
+3. Asynchronous Processing
+
+use executorservice, to Offload long-running tasks to background threads (e.g., using ExecutorService) and return response immediately.
+
+ExecutorService executor = Executors.newFixedThreadPool(10);
+executor.submit(() -> processLargeData());
+
+4. use @Cacheable
+
+
+Q. what is Multipart file ?
+
+it is used for uploading files - images, documents through web forms to a server.
+it allows multiple part or files to be uploaded in a single HTTP request.
+
+@RestController
+public class MultiFileUploadController {
+
+   @PostMapping("/uploadMultiple")
+   public String uploadMultipleFiles(@RequestParam("files") Multipart[] files)
+   {
+
+	for(MultipartFile file: files)
+         {
+		String filename = file.getOriginalFilename();
+                 long size = file.getSize();
+
+		try{
+
+			file.transferTo(new File("uploads/" + fileName));
+		}
+		catch(Exception e)
+		{
+			return "Error uploading file: " + fileName;
+		}		
+         }
+	
+   }
+
+}
+
+
+Q.What is the role of SpringApplication.run() and what happens internally?
+
+1. Entry point to start a Spring Boot application
+2. Loads configuration properties from application.properties, YAML files.
+3. Create ApplicationContext
+4. Spring Boot automatically configures beans based on classpath and properties.
+5.Starts embedded Tomcat/Jetty/Undertow server.
+
+Q How do you disable a specific auto-configuration?
+
+When the application starts, Spring Boot looks for the file: META-INF/spring.factories
+In this file, it reads the key:
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration
+
+he value of this key is a comma-separated list of configuration classes, for example:
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,\
+org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration,\
+org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+
+
+Spring Boot loads all these configuration classes i the application.If you have spring-boot-starter-data-jpa in your classpath:
+
+Spring Boot finds HibernateJpaAutoConfiguration from spring.factories.. If found, it auto-creates:
+
+EntityManagerFactory
+
+DataSource
+
+JpaTransactionManager
+ if you dont want any certain auto configuration than, we can exclude it by
+
+@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+public class MyApp { ... }
+
+
+
+
+Q.Role of META-INF/spring.factories in auto-configuration
+
+It is a file used by Spring Boot’s auto-configuration mechanism. Registers auto-configuration classes so Spring Boot knows which classes to load at startup.
+
+ex :-
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.example.MyCustomAutoConfiguration,\
+org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+
+During startup, Spring Boot reads this file and loads the listed classes automatically.
+
+Q. How do you create custom starter dependencies in Spring Boot?
+
+1. create a new maven project
+
+2. Add spring-boot-autoconfigure dependency
+
+3. create a Auto-Configuration class
+
+@Configuration
+public class MyCustomConfiguration{
+	
+    @Bean
+    public MyService myService() {
+        return new MyService();
+    }
+
+}
+
+
+4. add this in META-INF/spring.factories
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.example.autoconfig.MyCustomConfiguration
+
+
+5. Publish the starter as a Maven artifact.
+
+6. In your main Spring Boot project, add dependency:
+
+<dependency>
+    <groupId>com.example</groupId>
+    <artifactId>my-custom-starter</artifactId>
+</dependency>
+
+
+
+Q. OutOfMemoryError Troubleshooting "Your Spring Boot application is suddenly throwing an OutOfMemoryError. How would you investigate and resolve it?
+
+produce a heap dump, inspect the heap dump. Look at memory retained by an object and everything it references
+look for Repeated objects that should have been garbage-collected.
+
+Q. In a microservices-based architecture using Spring Boot, how would you handle communication failures between services?"
+
+use resilience 4J - like timeouts, retries, circuit breakers, fallbacks.
+
+Q. How to Secure APIs without Spring Security?
+
+Implement a request filter (Servlet Filter or OncePerRequestFilter-like custom) that Extracts token from the (Authorization header, Bearer).
+verifies the signature, check expiry, issuer, 
+
+
+
+Q. Can a microservice have 2 databases? How to make one primary
+
+annotate the primary datasource with @Primary annotation
+
+
+@Configuration
+public class DataSourceConfig {
+  @Bean
+  @Primary
+  @ConfigurationProperties("app.datasource.primary")
+  public DataSource primaryDataSource(){ ... }
+
+  @Bean
+  @ConfigurationProperties("app.datasource.secondary")
+  public DataSource secondaryDataSource(){ ... }
+
+  // Create LocalContainerEntityManagerFactoryBean and PlatformTransactionManager for each
+}
+
+
+Q. Does @OneToMany work for MongoDB?
+
+@OneToMany is a JPA annotation (for relational DBs). For MongoDB (with Spring Data MongoDB) you do not use JPA mappings.
+
+@Document(collection = "employees")
+public class Employee {
+
+    @Id
+    private String id;
+    private String name;
+    private String position;
+
+    public Employee() {}
+
+    public Employee(String name, String position) {
+        this.name = name;
+        this.position = position;
+    }
+
+    // Getters and Setters
+}
+
+@Document(collection = "departments")
+public class Department {
+
+    @Id
+    private String id;
+    private String name;
+
+    @DBRef(lazy = true) // lazy loading employees
+    private List<Employee> employees;
+
+    public Department() {}
+
+    public Department(String name, List<Employee> employees) {
+        this.name = name;
+        this.employees = employees;
+    }
+
+    // Getters and Setters
+}
+
+// @DBRef tells Mongo to store only the reference emp IDS inside the department collection
+instead of storing complete employee object. 
+
+
+Q Sharing a request ID across microservices (A → B → C) without data loss
+
+
+ String reqId = Optional.ofNullable(httpRequest.getHeader("X-Request-ID"))
+                .orElse(UUID.randomUUID().toString());
+  
+@RestController
+public class ServiceAController{
+   
+    @GetMapping("/call-b")
+    public String callSeviceB()
+   {
+	 String reqId = UUID.randomUUID().toString());
+	 HttpHeadrs headrs = new HttpHeaders();
+         headers.set("X-Request-ID", requestId);
+
+        HttpEntity<String> entity = new HttpEntity<>("Hello from A", headers);
+ 
+        // Call Service B
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:8081/api/service-b/receive",
+                HttpMethod.POST,
+                entity,
+                String.class
+        );
+	
+	return "got response "+ response.getBody();
+   }
+
+}
+
+@RestController
+@RequestMapping("/api/service-b")
+public class ServiceBController{
+	
+    @PostMapping("/receive")
+    public ResponseEntity<String> receiveFromA(@RequestBody String body,  @RequestHeader("X-Request-ID") String reqId)
+    {
+	logger.info("service B received request with Id = {}, body = {}", reqId, BODY);
+	return ResponseEntity.ok("processed by service B with id = "+ reqId);
+    }
+}
+
+Q. distributed logging and tracing
+
+Microservices are distributed, so logs need to be correlated across multiple services.
+Without correlation, debugging an issue across multiple services becomes very hard. Generate a requestId (or X-Correlation-ID) at the first entry point (API Gateway / Service A). Collect logs from all services into a single place like Kibana, elastic search
+
+Pass it via HTTP headers or message metadata to do	wnstream services like Service B, C, D etc
+
+Distributed tracing
+Distributed tracing follows a single request as it moves through multiple microservices.
+Logs tell you what happened, but not how long each service took or how requests flow
+
+
+example trace :
+
+Request → API Gateway (span 1, 10ms)
+         → User Service (span 2, 40ms)
+         → Order Service (span 3, 30ms)
+         → Payment Service (span 4, 120ms)
+
+
+Tracing helps with:
+
+1.Performance bottlenecks (which service is slow).
+
+2.Failure diagnosis (where request dropped).
+
+3. Visualization of request flows.
+
+Tracing is done by assigning a trace ID to each request... Opentelemetry is used for standard tracing
+
+
+Q. Netflix follows a microservices architecture deployed on the cloud (AWS in their case) with Spring Boot being a perfect fit if you were to build something similar:
+
+Clients: Web, Mobile, Smart TVs
+
+API Gateway: Handles authentication, request routing, rate limiting (e.g., Spring Cloud Gateway, Zuul)
+
+Microservices:
+
+User Service → authentication, profiles, subscriptions
+
+Catalog Service → movies, series metadata, search
+
+Recommendation Service → ML-based suggestions
+
+Streaming Service → handles actual video delivery (CDN integration)
+
+Billing Service → payment, invoices
+
+Analytics Service → user behavior, logs
+
+Databases: SQL + NoSQL mix (polyglot persistence)
+
+Storage: Object storage (e.g., AWS S3) for videos
+
+CDN (Content Delivery Network): Akamai, CloudFront, Netflix’s own Open Connect
+
+Message Queue: Kafka, RabbitMQ for async events
+
+Observability: Distributed tracing (Zipkin, Sleuth), Logging (ELK stack), Metrics (Prometheus + Grafana)
+
+🔹 2. Streaming Flow
+
+When a user clicks play on a video:
+
+Client requests video → API Gateway → Streaming Service.
+
+Streaming Service retrieves video URL from storage (e.g., S3) + CDN.
+
+Video files are chunked into segments (HLS/DASH).
+
+CDN delivers chunks closest to the user (low latency).
+
+Client continuously buffers chunks and plays seamlessly.
+
+👉 Streaming is NOT served directly from microservices, instead from CDN + cloud storage, because microservices can’t handle petabyte-scale video traffic.
+
+🔹 3. Storage of Videos
+
+Raw video files are too large for SQL or NoSQL.
+
+Store them in Object Storage:
+
+AWS S3 / Google Cloud Storage / Azure Blob.
+
+Use pre-signed URLs for secure client access.
+
+Metadata (movie title, genre, actors, duration):
+
+SQL DB (PostgreSQL, MySQL) for consistency (transactions).
+
+Recommendations, tags, user watch history:
+
+NoSQL (Cassandra, DynamoDB, MongoDB, Redis).
+
+Search (title, actor, description):
+
+Elasticsearch (fast indexing + text search).
+
+🔹 4. Database Choice
+
+SQL (Transactional data):
+
+User accounts, billing, subscriptions → PostgreSQL/MySQL
+
+NoSQL (Scalable, high-read/write data):
+
+Watch history, likes, recommendations → Cassandra, DynamoDB
+
+Caching:
+
+Redis / Memcached to reduce DB load.
+
+🔹 5. Handling Millions of Requests
+
+API Gateway + Load Balancers → scale horizontally.
+
+Microservices deployed in Kubernetes (EKS/GKE/AKS).
+
+Auto-scaling using cloud (scale out when traffic spikes).
+
+CDN offloads 90%+ video streaming traffic.
+
+Caching Layer (Redis, CDN edge nodes).
+
+Message Queues (Kafka) → async processing (analytics, recommendations).
+
+Circuit Breaker & Resilience → Netflix OSS (Hystrix), Resilience4j for fault tolerance.
+
+Q. what is application context ?
+
+it is a interface for accessing the Spring IOC (IOC container). it is used to manage bean instantiation, dependency injection, bean life cycle etc.
+
+public class HelloService {
+    public void sayHello() {
+        System.out.println("Hello from Spring Bean!");
+    }
+}
+
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AppConfig {
+    @Bean
+    public HelloService helloService() {
+        return new HelloService();
+    }
+}
+
+
+ApplicationContext context = new ApplicationContext(AppConfig.class);
+HelloService service = context.getBean("helloservice", HelloService.class);
+
+service.sayHello();
+
+Q. What is transient, volatile
+
+transient → Prevents a variable from being serialized.
+
+class User implements Serializable {
+   private String name;
+   private transient String password; // won't be saved in file
+}
+
+
+volatile boolean flag = true; // updates visible to all threads
+
+
+Q. Explain MVC Architecture
+
+MVC = Model–View–Controller
+
+Model → Data + Business logic (Entities, Service layer in Spring).
+
+View → UI layer (HTML, JSP, Thymeleaf, React frontend).
+
+Controller → Handles user requests, interacts with Model, returns View.
+
+👉 In Spring MVC:
+
+@Controller → Defines controller classes.
+
+@Service, @Repository → Part of Model layer.
+
+View → JSP/Thymeleaf templates.
+
+
+
+Q. application.properties file
+
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASS}
+
+
+.env file
+
+DB_URL=jdbc:mysql://localhost:3306/mydb
+DB_USER=root
+DB_PASS=admin123
+
+
+avoid committing .env to version control
+
+
+Q.Where does a JWT server store the JWT token?
+When a user logs in, the server signs a token using a secret/private key and gives it to the client (browser/mobile).
+The client stores it (usually in localStorage, cookies, or mobile secure storage).
+
+When requests come in, the server validates the signature using the same key.
+There is no server-side session storage.
+
+Q. If a table has too many indexes, what are the disadvantages?
+Disadvantage	Why?
+Slower INSERT/UPDATE/DELETE	Because index structures must be updated for every write.
+Increased storage usage	More indexes → more memory and disk usage.
+Slower bulk operations	Insert/update batches get significantly slower.
+
+Q. Give a case where an application cannot be deployed horizontally
+
+Applications doing in-memory computations that require shared synchronization.
+
+Monolithic apps that are tightly coupled and can't be broken into stateless services.
+
+Q. There are 2 services sending mails; how to avoid duplicate emails?
+
+Q.Types of Saga Patterns (Microservices)
+
+Saga = sequence of local transactions with compensating actions.
+
+Two types:
+a) Choreography Saga (Event-Driven)
+
+No central coordinator.
+
+Each service listens for events and publishes next events.
+
+Simpler, less coupling.
+
+Pros: Easy, scalable.
+Cons: Hard to manage complexity as services grow.
+
+Flow example (Order Service):
+
+OrderCreated → InventoryService
+
+StockReserved → PaymentService
+
+PaymentDone → ShippingService
+
+b) Orchestration Saga
+
+A central orchestrator commands each service.
+
+Orchestrator calls services directly, waits for responses, triggers compensations.
+
+Pros: Central control, easier debugging.
+Cons: Orchestrator becomes a dependency.
+
+Flow:
+
+Orchestrator → Inventory → Payment → Shipping
+
+If Payment fails → Orchestrator triggers compensate Inventory. 

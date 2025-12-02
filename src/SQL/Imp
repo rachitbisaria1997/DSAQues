@@ -1,4 +1,4 @@
-create database dbName;
+    create database dbName;
 drop database name;
 drop database if exists db_name;
 show databases;

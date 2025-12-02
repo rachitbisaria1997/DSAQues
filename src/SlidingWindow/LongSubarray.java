@@ -23,8 +23,8 @@ public class LongSubarray {
     }
 
     public static void main(String[] args) {
-        int[] arr = {0,0,1,1,0};
-        int k = 4;
+        int[] arr = {2, 7, 6, 1, 4, 5};
+        int k = 3;
         longestSubArray(arr, k);
     }
 
